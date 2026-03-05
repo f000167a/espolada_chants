@@ -49,26 +49,25 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .season-over { font-size: 1.1rem; font-weight: 700; color: var(--muted); padding: 12px 0; }
 
 .match-datetime {
-  display: flex; align-items: baseline; gap: 12px;
-  margin-bottom: 20px; flex-wrap: wrap;
+  display: flex; align-items: baseline; gap: 16px;
+  margin-bottom: 18px;
 }
 .match-date { font-size: 1.5rem; font-weight: 900; }
 .match-kickoff {
   font-size: 1.5rem; font-weight: 900; color: var(--sky);
-  margin-bottom: 18px;
 }
 .ko-label {
   font-size: 0.75rem; font-weight: 400; color: var(--muted);
-  margin-left: 6px;
+  margin-left: 4px;
 }
 .match-info-row {
-  font-size: 0.95rem; color: var(--text);
-  margin-bottom: 22px;
+  font-size: 0.95rem; color: var(--muted);
+  margin-bottom: 22px; display: flex; align-items: center; gap: 8px;
 }
-.info-ha { font-weight: 700; }
+.info-ha { font-weight: 700; color: var(--muted); }
 .info-ha.home { color: var(--sky); }
-.info-sep { color: var(--muted); margin: 0 6px; }
-.info-venue {}
+.info-sep { opacity: 0.3; }
+.info-venue { color: var(--text); font-weight: 700; }
 
 .match-vs {
   display: flex; align-items: center; gap: 14px;
@@ -245,42 +244,23 @@ async function loadSchedule() {
       <div class="next-label">Next Match — ${label}</div>
       <div class="match-datetime">
         <div class="match-date">${formatDate(nextMatch.date)}</div>
+        <div class="match-kickoff">${nextMatch.time} <span class="ko-label">KICKOFF</span></div>
       </div>
-      <div class="match-kickoff">${nextMatch.time} <span class="ko-label">KICKOFF</span></div>
       <div class="match-vs">
         <div class="team-espolada">エスポラーダ北海道</div>
         <div class="vs-sep">vs</div>
         <div class="team-opponent">${nextMatch.opponent}</div>
       </div>
       <div class="match-info-row">
-        <span class="info-ha ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "🏠 ホーム" : "✈️ アウェイ"}</span>
-        <span class="info-sep">·</span>
+        <span class="info-ha ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "ホーム" : "アウェイ"}</span>
+        <span class="info-sep">|</span>
         <span class="info-venue">${nextMatch.venue}</span>
       </div>
-      <div class="btn-row">
-        <button class="x-btn" id="toggle-preview" onclick="togglePreview()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          Xポスト案を見る
-        </button>
-      </div>
-      <div class="x-preview" id="x-preview">
-        <div class="x-preview-label">Post Preview — 編集してポスト</div>
-        <textarea class="x-preview-edit" id="post-text">${defaultText}</textarea>
-        <a class="post-btn" id="post-link" href="#" target="_blank" rel="noopener">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          Xに投稿する
-        </a>
-      </div>
+      <a class="x-btn" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(buildPostText(nextMatch, data.season))}" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Xでポスト
+      </a>
     `;
-
-    // Update post link on textarea change
-    const textarea = document.getElementById("post-text");
-    const postLink = document.getElementById("post-link");
-    function updateLink() {
-      postLink.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(textarea.value);
-    }
-    updateLink();
-    textarea.addEventListener("input", updateLink);
   } else {
     card.innerHTML = `
       <div class="next-label">Next Match</div>

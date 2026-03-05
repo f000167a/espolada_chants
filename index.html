@@ -31,12 +31,18 @@ body {
 
 .site-title {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
   color: var(--sky);
   text-transform: uppercase;
   margin-bottom: 32px;
 }
+.site-title a {
+  color: inherit; text-decoration: none; opacity: 0.6; transition: opacity 0.15s;
+}
+.site-title a:hover { opacity: 1; }
+.site-title .bc-sep { opacity: 0.4; margin: 0 6px; }
+.site-title .bc-current { opacity: 1; }
 
 /* ── TABS ── */
 .tabs {
@@ -325,8 +331,13 @@ body {
 </head>
 <body>
 
-<div class="site-title">Espolada Hokkaido — Chant Book</div>
-<div style="margin-bottom:24px;"><a href="./next-match.html" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;color:var(--sky);text-decoration:none;border:1px solid var(--sky-border);background:var(--sky-dim);padding:6px 14px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;">⚽ NEXT MATCH →</a></div>
+<div class="site-title">
+  Espolada Hokkaido
+  <span class="bc-sep">/</span>
+  <a href="./next-match.html" class="bc-current" style="opacity:0.6;">Next Match</a>
+  <span class="bc-sep">/</span>
+  <span class="bc-current">Chant Book</span>
+</div>
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('chants', this)">チームチャント</button>
