@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHANT BOOK — エスポラーダ北海道</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sky:        #29abe2;
+  --sky-mid:    #1a8fc4;
+  --sky-dim:    rgba(41,171,226,0.13);
+  --sky-border: rgba(41,171,226,0.5);
+  --text:       #0a1a2a;
+  --muted:      #6a7a8a;
+  --border:     rgba(41,171,226,0.15);
+  --bg:         #edf6fb;
+  --surface:    #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.site-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--sky);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid var(--sky-border);
+  margin-bottom: 24px;
+}
+.tab {
+  padding: 10px 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+  background: none;
+  border-top: none; border-left: none; border-right: none;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.tab:hover { color: var(--sky); }
+.tab.active { color: var(--sky); border-bottom-color: var(--sky); }
+
+/* ── LIST ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.item {
+  display: grid;
+  grid-template-columns: 200px auto 1fr;
+  align-items: center;
+  gap: 0 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+.item.wip { opacity: 0.35; }
+
+.item-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* バッジ列：名前のすぐ右に密着 */
+.item-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.6rem;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge-call {
+  background: var(--sky-dim);
+  border-color: var(--sky-border);
+  color: var(--sky-mid);
+  font-weight: 700;
+}
+.badge-call:hover {
+  background: rgba(41,171,226,0.22);
+  border-color: var(--sky);
+  color: var(--sky);
+}
+
+.badge-chant {
+  background: var(--sky);
+  border-color: var(--sky);
+  color: #fff;
+  font-weight: 700;
+}
+.badge-chant:hover {
+  background: var(--sky-mid);
+  border-color: var(--sky-mid);
+}
+
+/* チャントタブの歌詞バッジ */
+.badge-lyrics {
+  background: var(--sky-dim);
+  border-color: var(--sky-border);
+  color: var(--sky-mid);
+  font-weight: 700;
+}
+.badge-lyrics:hover {
+  background: rgba(41,171,226,0.22);
+  border-color: var(--sky);
+  color: var(--sky);
+}
+
+/* ── HOVER POPUP ── */
+.hover-popup {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  background: var(--surface);
+  border: 1px solid var(--sky-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  width: 280px;
+  pointer-events: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+.hover-popup.visible { display: block; }
+
+.popup-label {
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.popup-origin {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.popup-lines { display: flex; flex-direction: column; }
+.popup-line {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.9;
+}
+.popup-line.is-chant { color: var(--sky); }
+.popup-wip {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── BOTTOM SHEET MODAL ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-top: 3px solid var(--sky);
+  width: 100%;
+  max-width: 560px;
+  padding: 28px 24px 40px;
+  border-radius: 14px 14px 0 0;
+  animation: slide-up 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+@keyframes slide-up {
+  from { transform: translateY(32px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-close {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.close-btn {
+  background: none; border: none;
+  color: var(--muted); font-size: 2.2rem;
+  cursor: pointer; padding: 4px 8px;
+  transition: color 0.12s;
+}
+.close-btn:hover { color: var(--text); }
+
+.modal-player {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+.modal-section-label {
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.modal-origin {
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.modal-lines {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--sky-border);
+  background: rgba(41,171,226,0.06);
+}
+.modal-lines.is-call {
+  border-color: rgba(0,0,0,0.07);
+  background: rgba(0,0,0,0.03);
+}
+.modal-line {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sky);
+  line-height: 1.9;
+}
+.modal-line.is-call-line {
+  color: #333344;
+}
+.modal-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 20px;
+}
+.modal-wip {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.audio-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.play-btn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--sky-border);
+  background: transparent; color: var(--sky);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.play-btn:hover { background: var(--sky-dim); }
+.play-btn.playing { background: var(--sky-dim); animation: ring 1s ease infinite; }
+@keyframes ring {
+  0%,100%{ box-shadow: 0 0 0 0 rgba(41,171,226,0.4); }
+  50%    { box-shadow: 0 0 0 10px rgba(41,171,226,0); }
+}
+.play-btn:disabled {
+  border-color: var(--border); color: #ccccdd;
+  cursor: default; animation: none;
+}
+.audio-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem; color: var(--muted); letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+
+<div class="site-title">Espolada Hokkaido — Chant Book</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('chants', this)">チャント</button>
+  <button class="tab" onclick="switchTab('calls', this)">選手コール</button>
+</div>
+
+<div class="tab-panel active" id="panel-chants">
+  <div id="chant-list"></div>
+</div>
+<div class="tab-panel" id="panel-calls">
+  <div id="call-list"></div>
+</div>
+
+<!-- Hover popup -->
+<div class="hover-popup" id="hover-popup">
+  <div class="popup-label" id="popup-label"></div>
+  <div id="popup-content-wrap"></div>
+</div>
+
+<!-- Bottom sheet modal -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-close">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-inner"></div>
+    <div class="audio-row">
+      <button class="play-btn" id="modal-play" onclick="toggleAudio()">
+        <svg id="modal-icon" width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+          <path d="M0 0 L12 7 L0 14 Z"/>
+        </svg>
+      </button>
+      <div class="audio-status" id="audio-status">音源準備中</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const chants = [
+  { title: "エスポラーダコール",
+    lines: ["エースポラーダ＊＊　＊＊＊", "エースポラーダ＊＊　＊＊＊"], audio: null },
+  { title: "北海道コール",
+    lines: ["ほーっかいどー＊＊", "ほーっかいどー＊＊"], audio: null },
+  { title: "UNITE",
+    origin: "リパブリック讃歌",
+    lines: ["エースポラーダ　ユナイト", "エースポラーダ　ユナイト", "エースポラーダ　ユナイト", "エースポラーダ　北海道"], audio: null },
+  { title: "Can't Take My Eyes Off You",
+    origin: "君の瞳に恋してる",
+    lines: ["エ・ス・ポ・ラーダ　ラララララーラ", "エスポラーダ　ラララララーラ", "エスポラーダ　ラララララーラ", "エスポラーダ　ララーラ　ララーラーラー"], audio: null },
+  { title: "バモ北海道",
+    lines: ["オー　バモ北海道", "北海道　北海道", "バモ北海道"], audio: null },
+  { title: "行こうぜエスポラーダ",
+    lines: ["行こうぜ　行こうぜ　エスポラーダー", "北海道　北海道　オーオー"], audio: null },
+  { title: "青と白の戦士",
+    lines: ["アーレー　アーレー　アレー", "エスポ　アーレー", "青と白の誇りかけ", "共に戦おう"], audio: null },
+  { title: "ONE HEART HOKKAIDO",
+    lines: ["青と白の戦士　がむしゃらに走ろう", "熱く強く速く　共に戦おうぜ", "ONE HEART HOKKAIDO", "ONE HEART HOKKAIDO", "ONE HEART HOKKAIDO", "ONE HEART HOKKAIDO"], audio: null },
+  { title: "バモバモ北海道",
+    lines: ["バモバモー北海道", "バモバモー北海道", "バモー北海道", "バモー北海道"], audio: null },
+  { title: "エスポラーダGO",
+    lines: ["ほっ・かい・どう　エスポラーダ", "GO＊＊＊＊＊＊＊", "GO＊＊＊＊＊＊＊", "GO＊＊＊＊＊＊＊", "GO＊＊＊", "＊＊＊＊＊＊＊＊", "ほーっかいどー＊＊　ほーっかいどー＊＊", "ほーっかいどー＊＊　ほーっかいどー＊＊＊＊"], audio: null },
+  { title: "エスポのゴールが見たい",
+    lines: ["エスポのゴールが見たーい（見たい）", "見たーい（見たい）", "見たーい（見たい）", "エスポのゴールが見たーい", "ララララララ　ララーラー"], audio: null },
+  { title: "道産子の誇り",
+    lines: ["この歌声が聞こえるか", "熱い仲間がここに", "お前たちこそが　道産子の誇り", "さあ歌え飛び跳ねろ", "シャララララ　シャララーララ", "シャララララ　シャララーララ", "シャララララ　シャララーララ", "シャララララ　シャララーララ"], audio: null },
+];
+
+const calls = [
+  { title: "#1  戸田 貴英（GK）",   call: "たーか　たーか　たーか",
+    origin: "Narco",
+    chant: ["ラーラララー　ラーラララー", "とーだたかーひで　ラーラララー", "ラーラララー　ラーラララー", "とーだたかーひで　ラーラララー"], audio: null },
+  { title: "#2  杉上 理央（GK）",   call: "りーお　りーお　りーお",                                            origin: null, chant: null, audio: null },
+  { title: "#5  櫛部 悠路（FP）",   call: "ゆーろ＊＊＊　ゆーろ＊＊＊",                                        origin: null, chant: null, audio: null },
+  { title: "#6  笠島 大暉（FP）",   call: "だいき＊＊＊　だいき＊＊＊",
+    origin: "ザ・ヒットパレード",
+    chant: ["ゲットゴール　ゲットゴール", "かーさじーま　だーいきー", "ゲットゴール　ゲットゴール", "かーさじーま　だーいきー"], audio: null },
+  { title: "#7  室田 祐希（FP）",   call: "ゆーき＊＊＊　ゆーき＊＊＊",
+    origin: "勇気100％",
+    chant: ["そうさ　100％ゆーきー", "もうがんばるしーかなーいさー", "ゆーきだけが持つ輝き", "えいえーんに　忘れないーでねー", "（ヘイヘイ）"], audio: null },
+  { title: "#10 鈴木 裕太郎（FP）", call: ["ゆーたろー＊＊　＊＊＊", "ゆーたろー＊＊　＊＊＊"],
+    origin: "サタデーナイト",
+    chant: ["輝け俺たちの誇り", "ゆうたろう　ゆうたろう", "輝け俺たちの誇り", "ゆうたろう　ゆうたろう", "オオオーオオー　オーオーオーオオー"], audio: null },
+  { title: "#14 菅原 慶達（FP）",   call: ["け・い・た・つ＊＊＊＊", "け・い・た・つ＊＊＊＊"],
+    origin: "Kernkraft 400",
+    chant: ["・おおおおお　おっおおおおお", "おっおおおおっお　け・い・た・つ"], audio: null },
+  { title: "#15 佐藤 悠平（FP）",   call: "ゆーへい＊＊＊　ゆーへい＊＊＊",                                    origin: null, chant: null, audio: null },
+  { title: "#16 山本 航平（FP）",   call: "こーへい＊＊＊　こーへい＊＊＊",
+    origin: "See Off",
+    chant: ["止まらねー　やまーもと　こーへーい", "暴れーろ　荒ーれー狂えー", "ララララーラ　ラーラララー", "行けよ　こーへー"], audio: null },
+  { title: "#17 水上 玄太（FP）",   call: "げんた＊＊＊　げんた＊＊＊",
+    origin: "リンダリンダ",
+    chant: ["げんたげんたー", "げんたげんたげんたーー", "げんたげんたー", "げんたげんたげんたー　ゴール"], audio: null },
+  { title: "#18 宮原 勇哉（FP）",   call: ["みっやはら　みやはら＊＊", "みっやはら　みやはら＊＊"],
+    origin: "日曜日よりの使者",
+    chant: ["みやはーら　さあ行こうぜ", "みやはーら　ララララーラ", "みやはーら　バモポンテ", "みやはーら　ラララララー"], audio: null },
+  { title: "#19 中浦 慶大（FP）",   call: "けいた＊＊＊　けいた＊＊＊",                                        origin: null, chant: null, audio: null },
+  { title: "#20 佐藤 明生（FP）",   call: "あきお＊＊＊　あきお＊＊＊",
+    origin: "We Will Rock You",
+    chant: ["わーれーらーの　あきお", "行ーけー行ーけー　あきお"], audio: null },
+  { title: "#21 中野 翼（FP）",     call: ["なかのつーばさ＊＊＊", "なかのつーばさ＊＊＊"],                        origin: null, chant: null, audio: null },
+  { title: "#22 髙橋 翼（FP）",     call: "＊・＊　＊＊つばさ　＊・＊　＊＊つばさ",                            origin: null, chant: null, audio: null },
+  { title: "#23 西村 啓（FP）",     call: ["にしむら　けい＊＊　＊＊＊", "にしむら　けい＊＊　＊＊＊"],
+    origin: "ミッキーマウスマーチ",
+    chant: ["にっしむら　にっしむら　にっしむらけい", "にっしむら　にっしむら　にっしむらけい"], audio: null },
+  { title: "#24 荒谷 洸介（FP）",   call: "こうすけ＊＊＊　こうすけ＊＊＊",                                    origin: null, chant: null, audio: null },
+  { title: "#25 吉川 頼（GK）",     call: "らーい　らーい　らーい",                                            origin: null, chant: null, audio: null },
+];
+
+// ── ヘルパー ─────────────────────────────────────
+function renderLines(lines, isChant) {
+  return lines.map(l => `<div class="popup-line${isChant ? " is-chant" : ""}">${l}</div>`).join("");
+}
+function renderModalLines(lines, isChant) {
+  const boxClass = isChant ? "" : " is-call";
+  const lineClass = isChant ? "" : " is-call-line";
+  return `<div class="modal-lines${boxClass}">${lines.map(l => `<div class="modal-line${lineClass}">${l}</div>`).join("")}</div>`;
+}
+
+// ── POPUP ──────────────────────────────────────
+const isTouch  = window.matchMedia('(hover: none)').matches;
+const popup    = document.getElementById("hover-popup");
+const popupLabel = document.getElementById("popup-label");
+const popupContentWrap = document.getElementById("popup-content-wrap");
+let popupTimer = null;
+
+function showPopup(label, lines, isChant, origin, anchorEl) {
+  popupLabel.textContent = label;
+  let html = "";
+  if (origin) html += `<div class="popup-origin">♪ ${origin}</div>`;
+  html += `<div class="popup-lines">${renderLines(lines, isChant)}</div>`;
+  popupContentWrap.innerHTML = html;
+  popup.classList.add("visible");
+  requestAnimationFrame(() => positionPopup(anchorEl));
+}
+
+function positionPopup(anchorEl) {
+  const rect = anchorEl.getBoundingClientRect();
+  const ph   = popup.offsetHeight;
+  const left = rect.right + 10;
+  let top = rect.top + rect.height / 2 - ph / 2;
+  top = Math.max(8, Math.min(top, window.innerHeight - ph - 8));
+  popup.style.left = left + "px";
+  popup.style.top  = top  + "px";
+}
+
+function hidePopup() { popup.classList.remove("visible"); }
+
+function attachBadgeHover(badgeEl, label, lines, isChant, origin) {
+  badgeEl.addEventListener("mouseenter", () => {
+    clearTimeout(popupTimer);
+    showPopup(label, lines, isChant, origin, badgeEl);
+  });
+  badgeEl.addEventListener("mouseleave", () => {
+    popupTimer = setTimeout(hidePopup, 100);
+  });
+}
+
+// ── RENDER ──────────────────────────────────────
+function renderChants(items) {
+  const el = document.getElementById("chant-list");
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item" + (item.wip ? " wip" : "");
+
+    if (item.wip) {
+      div.innerHTML = `<span class="item-name">${item.title}</span><div class="item-badges"></div>`;
+      el.appendChild(div);
+      return;
+    }
+
+    div.innerHTML = `
+      <span class="item-name">${item.title}</span>
+      <div class="item-badges"><span class="badge badge-lyrics">歌詞</span></div>
+    `;
+
+    const lyricsBadge = div.querySelector(".badge-lyrics");
+    if (isTouch) {
+      lyricsBadge.addEventListener("click", () => openModalChant(item));
+    } else {
+      attachBadgeHover(lyricsBadge, "歌詞", item.lines, false, item.origin || null);
+      lyricsBadge.addEventListener("click", () => openModalChant(item));
+    }
+    el.appendChild(div);
+  });
+}
+
+function renderCalls(items) {
+  const el = document.getElementById("call-list");
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+
+    let badgesHTML = `<span class="badge badge-call">コール</span>`;
+    if (item.chant !== null) badgesHTML += `<span class="badge badge-chant">チャント</span>`;
+
+    div.innerHTML = `<span class="item-name">${item.title}</span><div class="item-badges">${badgesHTML}</div>`;
+
+    const callBadge  = div.querySelector(".badge-call");
+    const chantBadge = div.querySelector(".badge-chant");
+
+    if (isTouch) {
+      callBadge.addEventListener("click", () => openModalCall(item, "call"));
+      if (chantBadge) chantBadge.addEventListener("click", () => openModalCall(item, "chant"));
+    } else {
+      attachBadgeHover(callBadge, "コール", [].concat(item.call), false, null);
+      callBadge.addEventListener("click", () => openModalCall(item, "call"));
+      if (chantBadge) {
+        attachBadgeHover(chantBadge, "チャント", item.chant, true, item.origin);
+        chantBadge.addEventListener("click", () => openModalCall(item, "chant"));
+      }
+    }
+    el.appendChild(div);
+  });
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("panel-" + id).classList.add("active");
+  hidePopup();
+}
+
+// ── MODAL ────────────────────────────────────────
+let currentAudio = null;
+let currentItem  = null;
+
+function openModalChant(item) {
+  currentItem = item; hidePopup();
+  document.getElementById("modal-inner").innerHTML = `
+    <div class="modal-section-label">歌詞</div>
+    <div class="modal-title">${item.title}</div>
+    ${item.origin ? `<div class="modal-origin">♪ ${item.origin}</div>` : ""}
+    ${renderModalLines(item.lines, true)}
+  `;
+  setupModalAudio(item.audio);
+  document.getElementById("overlay").classList.add("open");
+}
+
+function openModalCall(item, type) {
+  currentItem = item; hidePopup(); stopAudio();
+  let inner = `<div class="modal-title">${item.title}</div>`;
+  if (type === "call") {
+    inner += `<div class="modal-section-label">コール</div>
+      ${renderModalLines([].concat(item.call), false)}`;
+    if (item.chant) {
+      inner += `<div class="modal-divider"></div>
+        <div class="modal-section-label">チャント</div>
+        ${item.origin ? `<div class="modal-origin">♪ ${item.origin}</div>` : ""}
+        ${renderModalLines(item.chant, true)}`;
+    }
+  } else {
+    inner += `<div class="modal-section-label">チャント</div>
+      ${item.origin ? `<div class="modal-origin">♪ ${item.origin}</div>` : ""}
+      ${renderModalLines(item.chant, true)}
+      <div class="modal-divider"></div>
+      <div class="modal-section-label">コール</div>
+      ${renderModalLines([].concat(item.call), false)}`;
+  }
+  document.getElementById("modal-inner").innerHTML = inner;
+  setupModalAudio(item.audio);
+  document.getElementById("overlay").classList.add("open");
+}
+
+function setupModalAudio(audioSrc) {
+  stopAudio();
+  const playBtn = document.getElementById("modal-play");
+  const icon    = document.getElementById("modal-icon");
+  const status  = document.getElementById("audio-status");
+  icon.innerHTML = '<path d="M0 0 L12 7 L0 14 Z"/>';
+  playBtn.classList.remove("playing");
+  playBtn.disabled = !audioSrc;
+  status.textContent = audioSrc ? "タップして再生" : "音源準備中";
+}
+
+function closeModal() {
+  stopAudio();
+  document.getElementById("overlay").classList.remove("open");
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById("overlay")) closeModal();
+}
+
+function stopAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+  const p = document.getElementById("modal-play");
+  const i = document.getElementById("modal-icon");
+  if (p) p.classList.remove("playing");
+  if (i) i.innerHTML = '<path d="M0 0 L12 7 L0 14 Z"/>';
+}
+
+function toggleAudio() {
+  if (!currentItem?.audio) return;
+  const playBtn = document.getElementById("modal-play");
+  const icon    = document.getElementById("modal-icon");
+  const status  = document.getElementById("audio-status");
+  if (currentAudio && !currentAudio.paused) {
+    stopAudio(); status.textContent = "タップして再生"; return;
+  }
+  if (!currentAudio) currentAudio = new Audio(currentItem.audio);
+  currentAudio.play();
+  currentAudio.onended = () => { stopAudio(); status.textContent = "タップして再生"; };
+  playBtn.classList.add("playing");
+  icon.innerHTML = '<rect x="0" y="0" width="4" height="14" rx="1"/><rect x="8" y="0" width="4" height="14" rx="1"/>';
+  status.textContent = "再生中";
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+window.addEventListener("resize", hidePopup);
+
+// ── スワイプ下で閉じる ──
+let swipeStartY = 0;
+const modalEl = document.querySelector(".modal");
+modalEl.addEventListener("touchstart", e => {
+  swipeStartY = e.touches[0].clientY;
+}, { passive: true });
+modalEl.addEventListener("touchend", e => {
+  const dy = e.changedTouches[0].clientY - swipeStartY;
+  if (dy > 60) closeModal();
+}, { passive: true });
+
+renderChants(chants);
+renderCalls(calls);
+</script>
+</body>
+</html>
