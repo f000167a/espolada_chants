@@ -253,9 +253,10 @@ async function loadSchedule() {
         <div class="match-kickoff">${nextMatch.time} <span class="ko-label">KICKOFF</span></div>
       </div>
       <div class="match-vs">
-        <div class="team-espolada">エスポラーダ北海道</div>
-        <div class="vs-sep">vs</div>
-        <div class="team-opponent">${nextMatch.opponent}</div>
+        ${nextMatch.home
+          ? `<div class="team-espolada">エスポラーダ北海道</div><div class="vs-sep">vs</div><div class="team-opponent">${nextMatch.opponent}</div>`
+          : `<div class="team-opponent">${nextMatch.opponent}</div><div class="vs-sep">vs</div><div class="team-espolada">エスポラーダ北海道</div>`
+        }
       </div>
       <div class="match-info-row">
         <span class="info-ha ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "ホーム" : "アウェイ"}</span>
