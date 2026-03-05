@@ -32,7 +32,13 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 }
 .site-title a { color: inherit; text-decoration: none; opacity: 0.6; transition: opacity 0.15s; }
 .site-title a:hover { opacity: 1; }
-.site-title span { opacity: 0.4; margin: 0 6px; }
+.site-title .bc-sep { opacity: 0.4; margin: 0 6px; }
+.site-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem; letter-spacing: 0.25em;
+  color: var(--sky); text-transform: uppercase;
+  margin-bottom: 4px;
+}
 
 /* NEXT MATCH CARD */
 .next-card {
@@ -54,7 +60,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 }
 .match-date { font-size: 1.5rem; font-weight: 900; }
 .match-kickoff {
-  font-size: 1.5rem; font-weight: 900; color: var(--sky);
+  font-size: 1.5rem; font-weight: 900; color: var(--text);
 }
 .ko-label {
   font-size: 0.75rem; font-weight: 400; color: var(--muted);
@@ -142,7 +148,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 }
 .schedule-item {
   display: grid;
-  grid-template-columns: 26px 1fr auto;
+  grid-template-columns: 52px 1fr auto;
   align-items: center; gap: 12px;
   padding: 11px 16px;
   border-bottom: 1px solid var(--border);
@@ -152,9 +158,12 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .schedule-item:hover { background: #f8fbfd; }
 .schedule-item.next-up { background: var(--sky-dim); }
 
-.s-node {
+.s-date-col {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.58rem; color: var(--muted); text-align: center;
+  font-size: 0.68rem; color: var(--muted); line-height: 1.4;
+}
+.s-node-small {
+  font-size: 0.52rem; color: var(--muted); opacity: 0.6;
 }
 .s-main {}
 .s-opponent { font-size: 0.88rem; font-weight: 700; }
@@ -187,10 +196,11 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 </head>
 <body>
 <div class="container">
+  <div class="site-brand">ESPOLADA HOKKAIDO</div>
   <div class="site-title">
     <a href="./index.html">Chant Book</a>
-    <span>/</span>
-    Next Match
+    <span class="bc-sep">/</span>
+    <span>Next Match</span>
   </div>
 
   <div id="next-card" class="next-card">
@@ -280,9 +290,10 @@ async function loadSchedule() {
     const div = document.createElement("div");
     div.className = "schedule-item" + (isNext ? " next-up" : "");
 
-    const nodeLabel = m.season_label ? `<span style="font-size:0.5rem;line-height:1.2;display:block">${m.season_label}</span>` : m.node;
+    const dateShort = formatDate(m.date).replace(/（.）/, "");
+    const nodeLabel = m.season_label ? m.season_label : `第${m.node}節`;
     div.innerHTML = `
-      <div class="s-node">${nodeLabel}</div>
+      <div class="s-date-col">${dateShort}<div class="s-node-small">${nodeLabel}</div></div>
       <div class="s-main">
         <div class="s-opponent">${m.opponent}</div>
         <div class="s-sub">
@@ -291,8 +302,7 @@ async function loadSchedule() {
         </div>
       </div>
       <div class="s-right">
-        <div class="s-result ${rc}">${m.result || "—"}</div>
-        <div class="s-time">${m.result ? formatDate(m.date).replace(/（.）/, "") : m.date.slice(5).replace("-","/")+` ${m.time}KO`}</div>
+        <div class="s-result ${rc}">${m.result || m.time+"KO"}</div>
       </div>
     `;
     listEl.appendChild(div);
