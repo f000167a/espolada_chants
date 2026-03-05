@@ -201,6 +201,25 @@ body {
   max-height: 80vh;
   overflow-y: auto;
 }
+
+@media (min-width: 600px) {
+  .overlay {
+    align-items: center;
+  }
+  .modal {
+    border-top: none;
+    border: 2px solid var(--sky-border);
+    border-radius: 14px;
+    max-width: 480px;
+    max-height: 80vh;
+    animation: fade-in 0.18s ease;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
 @keyframes slide-up {
   from { transform: translateY(32px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
