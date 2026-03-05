@@ -20,219 +20,170 @@
   --loss: #e74c3c;
   --draw: #f39c12;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.container { max-width: 640px; margin: 0 auto; padding: 32px 16px 64px; }
 
-body {
-  font-family: 'Noto Sans JP', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 32px 16px 64px;
-}
-
-/* ── HEADER ── */
+/* HEADER */
 .site-title {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.25em;
-  color: var(--sky);
-  text-transform: uppercase;
-  margin-bottom: 32px;
+  font-size: 0.72rem; letter-spacing: 0.25em; color: var(--sky);
+  text-transform: uppercase; margin-bottom: 32px;
 }
-.site-title a {
-  color: inherit;
-  text-decoration: none;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-}
+.site-title a { color: inherit; text-decoration: none; opacity: 0.6; transition: opacity 0.15s; }
 .site-title a:hover { opacity: 1; }
 .site-title span { opacity: 0.4; margin: 0 6px; }
 
-/* ── NEXT MATCH CARD ── */
+/* NEXT MATCH CARD */
 .next-card {
   background: var(--surface);
   border: 1.5px solid var(--sky-border);
-  border-radius: 16px;
-  padding: 28px 24px 24px;
+  border-radius: 16px; padding: 28px 24px 24px;
   margin-bottom: 32px;
   box-shadow: 0 4px 24px rgba(41,171,226,0.08);
 }
-
 .next-label {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.3em;
-  color: var(--sky);
-  text-transform: uppercase;
-  margin-bottom: 16px;
+  font-size: 0.58rem; letter-spacing: 0.3em; color: var(--sky);
+  text-transform: uppercase; margin-bottom: 16px;
 }
+.season-over { font-size: 1.1rem; font-weight: 700; color: var(--muted); padding: 12px 0; }
 
-.season-over {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--muted);
-  padding: 12px 0;
+.match-datetime {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
 }
-
-.match-node {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  color: var(--muted);
-  letter-spacing: 0.2em;
-  margin-bottom: 8px;
-}
-
-.match-date-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.match-date {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--text);
-}
-
+.match-date { font-size: 1.5rem; font-weight: 900; }
 .match-time {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--muted);
+  font-size: 1rem; font-weight: 700; color: var(--sky);
+  background: var(--sky-dim); padding: 3px 10px;
+  border-radius: 6px; border: 1px solid var(--sky-border);
+}
+.match-ko {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em;
 }
 
 .match-vs {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px; flex-wrap: wrap;
 }
-
-.team-name {
-  font-size: 1rem;
-  font-weight: 900;
-}
-.team-name.espolada { color: var(--sky); }
-
+.team-espolada { font-size: 1.05rem; font-weight: 900; color: var(--sky); }
 .vs-sep {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  flex-shrink: 0;
+  font-size: 0.65rem; color: var(--muted); flex-shrink: 0;
 }
+.team-opponent { font-size: 1.05rem; font-weight: 900; }
 
-.match-meta {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
+.match-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
 .meta-pill {
-  font-size: 0.72rem;
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  color: var(--muted);
+  font-size: 0.72rem; padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--border); color: var(--muted);
 }
-.meta-pill.home {
-  border-color: var(--sky-border);
-  background: var(--sky-dim);
-  color: var(--sky);
-}
+.meta-pill.home { border-color: var(--sky-border); background: var(--sky-dim); color: var(--sky); }
 
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .x-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #000;
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 18px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.15s;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #000; color: #fff; border: none; border-radius: 20px;
+  padding: 10px 18px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.05em; cursor: pointer;
+  text-decoration: none; transition: opacity 0.15s;
 }
 .x-btn:hover { opacity: 0.8; }
-.x-btn svg { flex-shrink: 0; }
 
-/* ── SCHEDULE LIST ── */
+/* X POST PREVIEW */
+.x-preview {
+  margin-top: 20px; padding: 16px;
+  background: #f7f9fa; border: 1px solid #e1e8ed;
+  border-radius: 12px; display: none;
+}
+.x-preview.open { display: block; }
+.x-preview-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.2em; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.x-preview-text {
+  font-size: 0.88rem; white-space: pre-wrap; line-height: 1.7;
+  color: var(--text);
+}
+.x-preview-edit {
+  margin-top: 12px;
+  width: 100%; font-size: 0.88rem; line-height: 1.7;
+  border: 1px solid #c9d6df; border-radius: 8px;
+  padding: 10px 12px; font-family: 'Noto Sans JP', sans-serif;
+  resize: vertical; min-height: 120px; color: var(--text);
+  background: #fff;
+}
+.x-preview-edit:focus { outline: none; border-color: var(--sky); }
+.post-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #000; color: #fff; border: none; border-radius: 20px;
+  padding: 9px 16px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; cursor: pointer; margin-top: 10px;
+  text-decoration: none; transition: opacity 0.15s;
+}
+.post-btn:hover { opacity: 0.8; }
+
+/* SECTION */
 .section-title {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.3em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 12px;
+  font-size: 0.55rem; letter-spacing: 0.3em; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 12px;
 }
 
+/* SCHEDULE LIST */
 .schedule-list {
-  background: var(--surface);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  background: var(--surface); border-radius: 12px;
+  overflow: hidden; border: 1px solid var(--border);
 }
-
 .schedule-item {
   display: grid;
-  grid-template-columns: 28px 80px 1fr 52px;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center; gap: 12px;
+  padding: 11px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 0.1s;
 }
 .schedule-item:last-child { border-bottom: none; }
 .schedule-item:hover { background: #f8fbfd; }
 .schedule-item.next-up { background: var(--sky-dim); }
+.schedule-item.has-link { cursor: pointer; }
 
 .s-node {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted);
-  text-align: center;
+  font-size: 0.58rem; color: var(--muted); text-align: center;
 }
-
-.s-date {
-  font-size: 0.72rem;
-  color: var(--muted);
+.s-main {}
+.s-opponent { font-size: 0.88rem; font-weight: 700; }
+.s-sub {
+  font-size: 0.68rem; color: var(--muted);
   font-family: 'IBM Plex Mono', monospace;
+  margin-top: 2px;
 }
+.s-sub .ha { }
+.s-sub .ha.home { color: var(--sky); }
 
-.s-opponent {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.s-ha {
-  font-size: 0.6rem;
-  color: var(--muted);
-  font-family: 'IBM Plex Mono', monospace;
-}
-.s-ha.home { color: var(--sky); }
-
+.s-right { text-align: right; }
 .s-result {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-align: right;
+  font-size: 0.78rem; font-weight: 700;
 }
 .s-result.win  { color: var(--win); }
 .s-result.loss { color: var(--loss); }
 .s-result.draw { color: var(--draw); }
 .s-result.upcoming { color: var(--muted); font-weight: 400; }
-
+.s-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem; color: var(--sky); margin-top: 2px;
+}
+.s-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.52rem; color: var(--sky); opacity: 0.7; margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -253,12 +204,10 @@ body {
 
 <script>
 const DAYS = ["日","月","火","水","木","金","土"];
-
 function formatDate(dateStr) {
   const d = new Date(dateStr + "T00:00:00");
-  return `${d.getMonth()+1}/${d.getDate()}（${DAYS[d.getDay()]}）`;
+  return `${d.getMonth()+1}月${d.getDate()}日（${DAYS[d.getDay()]}）`;
 }
-
 function resultClass(result) {
   if (!result) return "upcoming";
   if (result.startsWith("○")) return "win";
@@ -267,82 +216,128 @@ function resultClass(result) {
   return "";
 }
 
-function buildXText(match, season) {
+function buildPostText(match, season) {
   const ha = match.home ? "🏠ホーム" : "✈️アウェイ";
-  const date = formatDate(match.date);
-  const text = `【次節情報】メットライフ生命Fリーグ${season} 第${match.node}節\n`
-    + `${date} ${match.time}KO\n`
+  const label = match.season_label ? match.season_label : `メットライフ生命Fリーグ${season} 第${match.node}節`;
+  return `【次節】${label}\n`
+    + `${formatDate(match.date)} ${match.time}KO\n`
     + `エスポラーダ北海道 vs ${match.opponent}\n`
     + `${ha}｜${match.venue}\n`
     + `\n一緒に応援しよう！⚽️💙\n`
     + `#エスポラーダ北海道 #Fリーグ`;
-  return encodeURIComponent(text);
 }
+
+let previewOpen = false;
 
 async function loadSchedule() {
   const res = await fetch("./schedule.json");
   const data = await res.json();
-  const today = new Date();
-  today.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
 
   const matches = data.matches;
-  const nextMatch = matches.find(m => new Date(m.date) >= today && !m.result);
+  const nextMatch = matches.find(m => !m.result);
   const card = document.getElementById("next-card");
 
   if (nextMatch) {
-    const xText = buildXText(nextMatch, data.season);
+    const defaultText = buildPostText(nextMatch, data.season);
+    const label = nextMatch.season_label || `第${nextMatch.node}節`;
     card.innerHTML = `
-      <div class="next-label">Next Match — 第${nextMatch.node}節</div>
-      <div class="match-date-row">
+      <div class="next-label">Next Match — ${label}</div>
+      <div class="match-datetime">
         <div class="match-date">${formatDate(nextMatch.date)}</div>
-        <div class="match-time">${nextMatch.time} KO</div>
+        <div class="match-time">${nextMatch.time}</div>
+        <div class="match-ko">KO</div>
       </div>
       <div class="match-vs">
-        <div class="team-name espolada">エスポラーダ北海道</div>
+        <div class="team-espolada">エスポラーダ北海道</div>
         <div class="vs-sep">vs</div>
-        <div class="team-name">${nextMatch.opponent}</div>
+        <div class="team-opponent">${nextMatch.opponent}</div>
       </div>
       <div class="match-meta">
         <div class="meta-pill ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "🏠 ホーム" : "✈️ アウェイ"}</div>
         <div class="meta-pill">${nextMatch.venue}</div>
       </div>
-      <a class="x-btn" href="https://twitter.com/intent/tweet?text=${xText}" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-        Xでポスト
-      </a>
+      <div class="btn-row">
+        <button class="x-btn" id="toggle-preview" onclick="togglePreview()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Xポスト案を見る
+        </button>
+      </div>
+      <div class="x-preview" id="x-preview">
+        <div class="x-preview-label">Post Preview — 編集してポスト</div>
+        <textarea class="x-preview-edit" id="post-text">${defaultText}</textarea>
+        <a class="post-btn" id="post-link" href="#" target="_blank" rel="noopener">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Xに投稿する
+        </a>
+      </div>
     `;
+
+    // Update post link on textarea change
+    const textarea = document.getElementById("post-text");
+    const postLink = document.getElementById("post-link");
+    function updateLink() {
+      postLink.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(textarea.value);
+    }
+    updateLink();
+    textarea.addEventListener("input", updateLink);
   } else {
     card.innerHTML = `
       <div class="next-label">Next Match</div>
-      <div class="season-over">2025-26シーズン終了 🏆<br><small style="font-weight:400;color:var(--muted);font-size:0.85rem">優勝 — エスポラーダ北海道</small></div>
+      <div class="season-over">2025-26シーズン終了 🏆<br>
+        <small style="font-weight:400;color:var(--muted);font-size:0.85rem">優勝 — エスポラーダ北海道</small>
+      </div>
     `;
   }
 
   // Schedule list
   const listEl = document.getElementById("schedule-list");
   matches.forEach(m => {
-    const isNext = nextMatch && m.node === nextMatch.node;
+    const isNext = nextMatch && m === nextMatch;
     const rc = resultClass(m.result);
+    const haClass = m.home ? "home" : "";
+    const haLabel = m.home ? "HOME" : "AWAY";
     const div = document.createElement("div");
-    div.className = "schedule-item" + (isNext ? " next-up" : "");
+    div.className = "schedule-item" + (isNext ? " next-up" : "") + (m.fleague_url ? " has-link" : "");
+    if (m.fleague_url) div.onclick = () => window.open(m.fleague_url, "_blank");
+
+    const nodeLabel = m.season_label ? `<span style="font-size:0.5rem;line-height:1.2;display:block">${m.season_label}</span>` : m.node;
     div.innerHTML = `
-      <div class="s-node">${m.node}</div>
-      <div class="s-date">${formatDate(m.date)}</div>
-      <div>
+      <div class="s-node">${nodeLabel}</div>
+      <div class="s-main">
         <div class="s-opponent">${m.opponent}</div>
-        <div class="s-ha ${m.home ? "home" : ""}">${m.home ? "HOME" : "AWAY"} · ${m.venue}</div>
+        <div class="s-sub">
+          <span class="ha ${haClass}">${haLabel}</span>
+          · ${m.venue}
+        </div>
       </div>
-      <div class="s-result ${rc}">${m.result || m.time}</div>
+      <div class="s-right">
+        <div class="s-result ${rc}">${m.result || "—"}</div>
+        <div class="s-time">${m.result ? formatDate(m.date).replace(/（.）/, "") : m.date.slice(5).replace("-","/")+` ${m.time}KO`}</div>
+        ${m.fleague_url ? '<div class="s-link">公式 →</div>' : ""}
+      </div>
     `;
     listEl.appendChild(div);
   });
 }
 
-loadSchedule().catch(err => {
+function togglePreview() {
+  const preview = document.getElementById("x-preview");
+  const btn = document.getElementById("toggle-preview");
+  if (!preview) return;
+  previewOpen = !previewOpen;
+  preview.classList.toggle("open", previewOpen);
+  btn.textContent = previewOpen ? "▲ 閉じる" : "Xポスト案を見る";
+  if (previewOpen) {
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> 閉じる`;
+  } else {
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Xポスト案を見る`;
+  }
+}
+
+loadSchedule().catch(() => {
   document.getElementById("next-card").innerHTML =
-    `<div class="next-label">Next Match</div><div class="season-over" style="color:var(--loss)">データ取得失敗</div>`;
+    `<div class="next-label">Error</div><div class="season-over" style="color:var(--loss)">データ取得失敗</div>`;
 });
 </script>
 </body>
