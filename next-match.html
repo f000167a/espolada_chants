@@ -261,7 +261,7 @@ async function loadSchedule() {
       <div class="match-info-row">
         <span class="info-ha ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "ホーム" : "アウェイ"}</span>
         <span class="info-sep">|</span>
-        <span class="info-venue">@ ${nextMatch.venue}</span>
+        <span class="info-venue">＠${nextMatch.venue}</span>
       </div>
       <a class="x-btn" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(buildPostText(nextMatch, data.season))}" target="_blank" rel="noopener">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
