@@ -150,7 +150,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   display: grid;
   grid-template-columns: 52px 1fr auto;
   align-items: center; gap: 12px;
-  padding: 11px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 0.1s;
 }
@@ -160,17 +160,13 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
 .s-date-col {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.68rem; color: var(--muted); line-height: 1.4;
-}
-.s-node-small {
-  font-size: 0.52rem; color: var(--muted); opacity: 0.6;
+  font-size: 0.78rem; color: var(--muted); line-height: 1.6;
 }
 .s-main {}
-.s-opponent { font-size: 0.88rem; font-weight: 700; }
+.s-opponent { font-size: 1rem; font-weight: 700; }
 .s-sub {
-  font-size: 0.68rem; color: var(--muted);
-  font-family: 'IBM Plex Mono', monospace;
-  margin-top: 2px;
+  font-size: 0.78rem; color: var(--muted);
+  margin-top: 3px;
 }
 .s-sub .ha { }
 .s-sub .ha.home { color: var(--sky); }
@@ -178,7 +174,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .s-right { text-align: right; }
 .s-result {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem; font-weight: 700;
+  font-size: 0.88rem; font-weight: 700;
 }
 .s-result.win  { color: var(--win); }
 .s-result.loss { color: var(--loss); }
@@ -293,7 +289,7 @@ async function loadSchedule() {
     const dateShort = formatDate(m.date).replace(/（.）/, "");
     const nodeLabel = m.season_label ? m.season_label : `第${m.node}節`;
     div.innerHTML = `
-      <div class="s-date-col">${dateShort}<div class="s-node-small">${nodeLabel}</div></div>
+      <div class="s-date-col">${nodeLabel}<br>${dateShort}</div>
       <div class="s-main">
         <div class="s-opponent">${m.opponent}</div>
         <div class="s-sub">
