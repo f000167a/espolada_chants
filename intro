@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一緒に応援しよう！ — エスポラーダ北海道</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --blue: #29abe2;
+  --blue-dark: #1a8fc4;
+  --blue-light: #e8f6fd;
+  --blue-mid: rgba(41,171,226,0.15);
+  --red: #e63946;
+  --text: #1a2a3a;
+  --muted: #7a8a9a;
+  --border: #d8eaf5;
+  --bg: #f4f9fd;
+  --surface: #ffffff;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  max-width: 580px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+/* ── 固定バナー ── */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar-brand {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  letter-spacing: 0.1em;
+}
+
+.top-bar-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  border: 1.5px solid var(--blue);
+  padding: 5px 14px;
+  border-radius: 20px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.top-bar-link:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ── ステップ1 ── */
+.step1 {
+  background: var(--blue);
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 56px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* 背景の装飾円 */
+.step1::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+
+.step1::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+.step1-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.step1-heading {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.35;
+  position: relative;
+  z-index: 1;
+}
+
+.step1-subheading {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+/* チャント表示 */
+.chant-block {
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 32px 36px;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 320px;
+}
+
+.chant-line {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.chant-clap {
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+  color: rgba(255,255,255,0.95);
+}
+
+.chant-clap:last-child {
+  margin-bottom: 0;
+}
+
+.step1-note {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+  position: relative;
+  z-index: 1;
+  line-height: 1.6;
+}
+
+/* 下スクロール誘導 */
+.scroll-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+  animation: bounce 2s ease infinite;
+}
+
+.scroll-hint-text {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.1em;
+}
+
+.scroll-hint-arrow {
+  color: rgba(255,255,255,0.5);
+  font-size: 1.2rem;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── ステップ2 ── */
+.step2 {
+  padding: 40px 20px 32px;
+}
+
+.step-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.step-title {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* チャントカード */
+.chant-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chant-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chant-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 2px 12px rgba(41,171,226,0.15);
+}
+
+.chant-card-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.chant-card-icon.is-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.chant-card-info {
+  flex: 1;
+}
+
+.chant-card-name {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.chant-card-scene {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.chant-card-arrow {
+  color: var(--muted);
+  font-size: 1.1rem;
+  transition: transform 0.15s;
+}
+
+.chant-card:hover .chant-card-arrow {
+  transform: translateX(3px);
+  color: var(--blue);
+}
+
+/* ── ステップ3 ── */
+.step3 {
+  padding: 32px 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.step3-emoji {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.step3-title {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.step3-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.step3-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  transition: background 0.15s, transform 0.12s;
+}
+
+.step3-btn:hover {
+  background: var(--blue-dark);
+  transform: translateY(-1px);
+}
+
+/* ── MODAL ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-top: 4px solid var(--blue);
+  width: 100%;
+  max-width: 580px;
+  padding: 0 0 40px;
+  border-radius: 18px 18px 0 0;
+  animation: slide-up 0.22s cubic-bezier(0.32,0.72,0,1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-close-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 16px 0;
+}
+
+.close-btn {
+  background: var(--bg);
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.close-btn:hover { background: var(--blue-light); color: var(--blue); }
+
+.modal-body { padding: 8px 22px 0; }
+
+.modal-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.modal-scene {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--blue-dark);
+  background: var(--blue-light);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: 18px;
+}
+
+.modal-origin {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.modal-lines {
+  background: var(--blue-light);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 8px;
+}
+
+.modal-line {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  line-height: 2;
+}
+
+.modal-legend {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- 固定バナー -->
+<div class="top-bar" style="justify-content: flex-end;">
+  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/">全チャント・選手一覧</a>
+</div>
+
+<!-- ステップ1 -->
+<div class="step1">
+  <div class="step1-eyebrow">ESPOLADA HOKKAIDO / CHANT BOOK</div>
+  <div class="step1-heading">声・手拍子で<br>エスポラーダを<br>応援しよう📣</div>
+  <div class="step1-subheading">まずは、太鼓に合わせて手拍子から！</div>
+
+  <div class="chant-block">
+    <div class="chant-line">エースポラーダ！</div>
+    <div class="chant-clap">👏👏　👏👏👏</div>
+    <div class="chant-line">エースポラーダ！</div>
+    <div class="chant-clap">👏👏　👏👏👏</div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-hint-text">もっと見る</div>
+    <div class="scroll-hint-arrow">↓</div>
+  </div>
+</div>
+
+<!-- ステップ2 -->
+<div class="step2">
+  <div class="step-label">STEP 2</div>
+  <div class="step-title">声も出してみよう（チャント例）</div>
+  <div class="step-desc">手拍子に慣れたら、声も一緒に。</div>
+
+  <div class="chant-cards" id="step2-cards"></div>
+</div>
+
+<!-- ステップ3 -->
+<div class="step3">
+  <div class="step-label">STEP 3</div>
+  <div class="step3-title">もっと覚えたい人へ</div>
+  <div class="step3-desc">全チャント・選手コールの一覧はこちら。</div>
+  <a class="step3-btn" href="https://f000167a.github.io/espolada_chants/">全チャント・選手一覧</a>
+</div>
+
+<!-- モーダル -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-close-row">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const step2chants = [
+  { title: "エスポラーダGO",
+    scene: "リズムに乗って、全力応援！",
+    icon: "⚡",
+    lines: ["ほっ・かい・どう　エスポラーダ", "GO＊＊＊＊＊＊＊", "GO＊＊＊＊＊＊＊", "GO＊＊＊＊＊＊＊"],
+    hasClap: true,
+    scene_note: "※ 説明文検討中" },
+  { title: "バモ北海道",
+    scene: "選手に力を！盛り上げどころ！",
+    icon: "🔥",
+    lines: ["オー　バモ北海道", "北海道　北海道", "バモ北海道"] },
+  { title: "ONE HEART HOKKAIDO",
+    scene: "心をひとつに！",
+    icon: "🩵",
+    lines: ["青と白の戦士　がむしゃらに走ろう", "熱く強く速く　共に戦おうぜ", "ONE HEART HOKKAIDO", "ONE HEART HOKKAIDO"] },
+];
+
+function renderStep2() {
+  const el = document.getElementById("step2-cards");
+  step2chants.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "chant-card";
+    div.innerHTML = `
+      <div class="chant-card-icon">${item.icon}</div>
+      <div class="chant-card-info">
+        <div class="chant-card-name">${item.title}</div>
+        <div class="chant-card-scene">${item.scene}</div>
+      </div>
+      <div class="chant-card-arrow">›</div>`;
+    div.addEventListener("click", () => openModal(item));
+    el.appendChild(div);
+  });
+}
+
+function openModal(item) {
+  const hasClap = item.hasClap;
+  const linesHTML = item.lines.map(l =>
+    `<div class="modal-line">${l}</div>`
+  ).join("");
+
+  document.getElementById("modal-body").innerHTML = `
+    <div class="modal-type">チームチャント</div>
+    <div class="modal-title">${item.title}</div>
+    <div class="modal-scene">🎯 ${item.scene}</div>
+    <div class="modal-lines">${linesHTML}</div>
+    ${hasClap ? `<div class="modal-legend">💡 ＊ は太鼓のリズムです。声は出さなくてOK。</div>` : ""}
+    ${item.note ? `<div class="modal-legend" style="margin-top:10px">👆 ${item.note}</div>` : ""}
+  `;
+  document.getElementById("overlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("overlay").classList.remove("open");
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById("overlay")) closeModal();
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+// スワイプで閉じる
+let swipeY = 0;
+document.querySelector(".modal").addEventListener("touchstart", e => { swipeY = e.touches[0].clientY; }, { passive: true });
+document.querySelector(".modal").addEventListener("touchend", e => { if (e.changedTouches[0].clientY - swipeY > 60) closeModal(); }, { passive: true });
+
+renderStep2();
+</script>
+</body>
+</html>
