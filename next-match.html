@@ -3,216 +3,402 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schedule — Espolada Hokkaido</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<title>試合日程 — エスポラーダ北海道</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --sky: #29abe2;
-  --sky-dim: rgba(41,171,226,0.08);
-  --sky-border: rgba(41,171,226,0.2);
-  --bg: #f0f7fc;
+  --blue: #29abe2;
+  --blue-dark: #1a8fc4;
+  --blue-light: #e8f6fd;
+  --blue-mid: rgba(41,171,226,0.12);
+  --text: #1a2a3a;
+  --muted: #7a8a9a;
+  --border: #d8eaf5;
+  --bg: #f4f9fd;
   --surface: #ffffff;
-  --text: #1a1a2e;
-  --muted: #8899aa;
-  --border: rgba(0,0,0,0.07);
   --win: #2ecc71;
   --loss: #e74c3c;
   --draw: #f39c12;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-.container { max-width: 640px; margin: 0 auto; padding: 32px 16px 64px; }
 
-/* HEADER */
-.site-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem; letter-spacing: 0.25em; color: var(--sky);
-  text-transform: uppercase; margin-bottom: 32px;
-}
-.site-title a { color: inherit; text-decoration: none; opacity: 0.6; transition: opacity 0.15s; }
-.site-title a:hover { opacity: 1; }
-.site-title .bc-sep { opacity: 0.4; margin: 0 6px; }
-.site-brand {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.85rem; letter-spacing: 0.25em;
-  color: var(--sky); text-transform: uppercase;
-  margin-bottom: 4px;
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  max-width: 580px;
+  margin: 0 auto;
+  padding-bottom: 60px;
 }
 
-/* NEXT MATCH CARD */
+/* ── HEADER ── */
+.header {
+  background: var(--blue);
+  padding: 28px 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 40px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+
+.header-brand {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-title {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-sub {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.85);
+  position: relative;
+  z-index: 1;
+}
+
+.header-nav {
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-nav a {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 5px 14px;
+  border-radius: 20px;
+  transition: all 0.15s;
+}
+
+.header-nav a:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* ── NEXT MATCH CARD ── */
+.section-wrap {
+  padding: 20px 16px 0;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
 .next-card {
   background: var(--surface);
-  border: 1.5px solid var(--sky-border);
-  border-radius: 16px; padding: 28px 24px 24px;
-  margin-bottom: 32px;
-  box-shadow: 0 4px 24px rgba(41,171,226,0.08);
+  border: 2px solid var(--blue);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
 }
-.next-label {
-  font-size: 0.85rem; font-weight: 700; color: var(--sky);
+
+.next-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.next-date {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.next-time {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+/* ホーム・アウェーバッジ */
+.ha-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 5px 14px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+.ha-badge.home {
+  background: var(--blue);
+  color: #fff;
+}
+
+.ha-badge.away {
+  background: var(--text);
+  color: #fff;
+}
+
+.next-vs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
-.season-over { font-size: 1.1rem; font-weight: 700; color: var(--muted); padding: 12px 0; }
 
-.match-datetime {
-  display: flex; align-items: baseline; gap: 8px;
-  margin-bottom: 18px;
+.next-espolada {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--blue);
 }
-.match-date { font-size: 1.5rem; font-weight: 900; }
-.match-kickoff {
-  font-size: 1.5rem; font-weight: 900; color: var(--text);
-}
-.ko-label {
-  font-size: 0.75rem; font-weight: 400; color: var(--muted);
-  margin-left: 4px;
-}
-.match-info-row {
-  font-size: 0.95rem; color: var(--muted);
-  margin-bottom: 22px; display: flex; align-items: center; gap: 8px;
-}
-.info-ha { font-weight: 700; color: var(--muted); }
-.info-ha.home { color: var(--sky); }
-.info-sep { opacity: 0.3; }
-.info-venue { color: var(--text); font-weight: 700; }
 
-.match-vs {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 18px; flex-wrap: wrap;
+.next-vs-sep {
+  font-size: 0.8rem;
+  color: var(--muted);
 }
-.team-espolada { font-size: 1.05rem; font-weight: 900; color: var(--sky); }
-.vs-sep {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem; color: var(--muted); flex-shrink: 0;
-}
-.team-opponent { font-size: 1.05rem; font-weight: 900; }
 
-.match-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
-
-
-/* BUTTONS */
-.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.x-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #000; color: #fff; border: none; border-radius: 20px;
-  padding: 10px 18px; font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem; letter-spacing: 0.05em; cursor: pointer;
-  text-decoration: none; transition: opacity 0.15s;
-}
-.x-btn:hover { opacity: 0.8; }
-
-/* X POST PREVIEW */
-.x-preview {
-  margin-top: 20px; padding: 16px;
-  background: #f7f9fa; border: 1px solid #e1e8ed;
-  border-radius: 12px; display: none;
-}
-.x-preview.open { display: block; }
-.x-preview-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.52rem; letter-spacing: 0.2em; color: var(--muted);
-  text-transform: uppercase; margin-bottom: 10px;
-}
-.x-preview-text {
-  font-size: 0.88rem; white-space: pre-wrap; line-height: 1.7;
+.next-opponent {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
   color: var(--text);
 }
-.x-preview-edit {
-  margin-top: 12px;
-  width: 100%; font-size: 0.88rem; line-height: 1.7;
-  border: 1px solid #c9d6df; border-radius: 8px;
-  padding: 10px 12px; font-family: 'Noto Sans JP', sans-serif;
-  resize: vertical; min-height: 120px; color: var(--text);
-  background: #fff;
-}
-.x-preview-edit:focus { outline: none; border-color: var(--sky); }
-.post-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #000; color: #fff; border: none; border-radius: 20px;
-  padding: 9px 16px; font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem; cursor: pointer; margin-top: 10px;
-  text-decoration: none; transition: opacity 0.15s;
-}
-.post-btn:hover { opacity: 0.8; }
 
-/* SECTION */
-.section-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem; letter-spacing: 0.2em; color: var(--muted);
-  text-transform: uppercase; margin-bottom: 12px;
+.next-venue {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 18px;
 }
 
-/* SCHEDULE LIST */
+.next-venue span {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.share-btn:hover { opacity: 0.8; }
+
+.season-over {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--muted);
+  padding: 8px 0;
+}
+
+/* ── SCHEDULE LIST ── */
 .schedule-list {
-  background: var(--surface); border-radius: 12px;
-  overflow: hidden; border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
 }
+
 .schedule-item {
   display: grid;
-  grid-template-columns: 52px 1fr auto;
-  align-items: center; gap: 12px;
-  padding: 14px 16px;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
   border-bottom: 1px solid var(--border);
   transition: background 0.1s;
 }
+
 .schedule-item:last-child { border-bottom: none; }
-.schedule-item:hover { background: #f8fbfd; }
-.schedule-item.next-up { background: var(--sky-dim); }
+.schedule-item:hover { background: var(--blue-light); }
+.schedule-item.next-up { background: var(--blue-mid); }
+.schedule-item.final-season { background: #f8f4ff; }
 
-.s-date-col {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem; color: var(--muted); line-height: 1.6;
+.s-node {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
 }
-.s-main {}
-.s-opponent { font-size: 1rem; font-weight: 700; }
+
+.s-date {
+  font-size: 0.75rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.s-opponent {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
 .s-sub {
-  font-size: 0.78rem; color: var(--muted);
-  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.s-sub .ha { }
-.s-sub .ha.home { color: var(--sky); }
 
-.s-right { text-align: right; }
-.s-result {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.88rem; font-weight: 700;
+/* ホーム・アウェーインライン */
+.ha-pill {
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
 }
+
+.ha-pill.home {
+  background: var(--blue);
+  color: #fff;
+}
+
+.ha-pill.away {
+  background: var(--text);
+  color: #fff;
+}
+
+.s-venue {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.s-result {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: right;
+}
+
 .s-result.win  { color: var(--win); }
 .s-result.loss { color: var(--loss); }
 .s-result.draw { color: var(--draw); }
-.s-result.upcoming { color: var(--muted); font-weight: 400; }
-.s-time {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.68rem; color: var(--sky); margin-top: 2px;
+.s-result.upcoming {
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 400;
 }
-.s-link {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.52rem; color: var(--sky); opacity: 0.7; margin-top: 2px;
+.s-result.tbd {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+/* ファイナルシーズン区切り */
+.final-header {
+  background: #ede8ff;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.final-header-label {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #6b46c1;
+}
+
+.final-header-sub {
+  font-size: 0.72rem;
+  color: #9b7fd4;
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="site-brand">ESPOLADA HOKKAIDO</div>
-  <div class="site-title">
-    <a href="./index.html">Chant Book</a>
-    <span class="bc-sep">/</span>
-    <span>Schedule</span>
-  </div>
 
+<div class="header">
+  <div class="header-brand">ESPOLADA HOKKAIDO</div>
+  <div class="header-title">試合日程</div>
+  <div class="header-sub">メットライフ生命Fリーグ2026-27 ディビジョン1</div>
+  <div class="header-nav">
+    <a href="./index.html">← チャントブック</a>
+  </div>
+</div>
+
+<div class="section-wrap">
+  <div class="section-label">NEXT MATCH</div>
   <div id="next-card" class="next-card">
-    <div class="next-label">Loading…</div>
+    <div style="color:var(--muted);font-size:0.9rem;">読み込み中…</div>
   </div>
 
-  <div class="section-title">2025-26 全試合日程</div>
+  <div class="section-label">2026-27 全試合日程</div>
   <div id="schedule-list" class="schedule-list"></div>
 </div>
 
 <script>
 const DAYS = ["日","月","火","水","木","金","土"];
+
 function formatDate(dateStr) {
+  if (!dateStr) return "日程未定";
+  const d = new Date(dateStr + "T00:00:00");
+  return `${d.getMonth()+1}/${d.getDate()}（${DAYS[d.getDay()]}）`;
+}
+
+function formatDateLong(dateStr) {
+  if (!dateStr) return "日程未定";
   const d = new Date(dateStr + "T00:00:00");
   return `${d.getMonth()+1}月${d.getDate()}日（${DAYS[d.getDay()]}）`;
 }
+
 function resultClass(result) {
   if (!result) return "upcoming";
   if (result.startsWith("○")) return "win";
@@ -223,106 +409,135 @@ function resultClass(result) {
 
 function buildPostText(match, season) {
   const ha = match.home ? "🏠ホーム" : "✈️アウェイ";
-  const label = match.season_label ? match.season_label : `メットライフ生命Fリーグ${season} 第${match.node}節`;
+  const label = `メットライフ生命Fリーグ${season} 第${match.node}節`;
+  const datePart = match.date ? `${formatDateLong(match.date)} ${match.time}KO` : "日程調整中";
   return `【次節】${label}\n`
-    + `${formatDate(match.date)} ${match.time}KO\n`
+    + `${datePart}\n`
     + `エスポラーダ北海道 vs ${match.opponent}\n`
-    + `${ha}｜${match.venue}\n`
+    + `${ha}｜${match.venue || "会場未定"}\n`
     + `\n一緒に応援しよう！⚽️💙\n`
     + `#エスポラーダ北海道 #Fリーグ`;
 }
 
-let previewOpen = false;
-
 async function loadSchedule() {
   const res = await fetch("./schedule.json");
   const data = await res.json();
-  const today = new Date(); today.setHours(0,0,0,0);
 
   const matches = data.matches;
   const nextMatch = matches.find(m => !m.result);
   const card = document.getElementById("next-card");
 
   if (nextMatch) {
-    const defaultText = buildPostText(nextMatch, data.season);
-    const label = nextMatch.season_label || `第${nextMatch.node}節`;
+    const haClass = nextMatch.home ? "home" : "away";
+    const haLabel = nextMatch.home ? "🏠 HOME" : "✈️ AWAY";
+    const vsHTML = nextMatch.home
+      ? `<div class="next-espolada">エスポラーダ北海道</div>
+         <div class="next-vs-sep">vs</div>
+         <div class="next-opponent">${nextMatch.opponent}</div>`
+      : `<div class="next-opponent">${nextMatch.opponent}</div>
+         <div class="next-vs-sep">vs</div>
+         <div class="next-espolada">エスポラーダ北海道</div>`;
+
+    const dateLine = nextMatch.date
+      ? `<div class="next-date">${formatDateLong(nextMatch.date)}</div>
+         <div class="next-time">${nextMatch.time} キックオフ</div>`
+      : `<div class="next-date" style="color:var(--muted);font-size:1.1rem;">日程未定</div>
+         <div class="next-time" style="color:var(--muted);">詳細は後日発表</div>`;
+
+    const venueLine = nextMatch.venue && nextMatch.venue !== "未定"
+      ? `＠<span>${nextMatch.venue}</span>`
+      : `<span style="color:var(--muted)">会場未定</span>`;
+
     card.innerHTML = `
-      <div class="next-label">Next Match — ${label}</div>
-      <div class="match-datetime">
-        <div class="match-date">${formatDate(nextMatch.date)}</div>
-        <div class="match-kickoff">${nextMatch.time} <span class="ko-label">KICKOFF</span></div>
-      </div>
-      <div class="match-vs">
-        ${nextMatch.home
-          ? `<div class="team-espolada">エスポラーダ北海道</div><div class="vs-sep">vs</div><div class="team-opponent">${nextMatch.opponent}</div>`
-          : `<div class="team-opponent">${nextMatch.opponent}</div><div class="vs-sep">vs</div><div class="team-espolada">エスポラーダ北海道</div>`
-        }
-      </div>
-      <div class="match-info-row">
-        <span class="info-ha ${nextMatch.home ? "home" : ""}">${nextMatch.home ? "HOME" : "AWAY"}</span>
-        <span class="info-sep">|</span>
-        <span class="info-venue">＠${nextMatch.venue}</span>
-      </div>
-      <a class="x-btn" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(buildPostText(nextMatch, data.season))}" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        シェアしよう！
+      <div class="next-node">第${nextMatch.node}節</div>
+      ${dateLine}
+      <div class="ha-badge ${haClass}">${haLabel}</div>
+      <div class="next-vs">${vsHTML}</div>
+      <div class="next-venue">${venueLine}</div>
+      <a class="share-btn"
+        href="https://twitter.com/intent/tweet?text=${encodeURIComponent(buildPostText(nextMatch, data.season))}"
+        target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        Xでシェア
       </a>
     `;
   } else {
     card.innerHTML = `
-      <div class="next-label">Next Match</div>
-      <div class="season-over">2025-26シーズン終了 🏆<br>
-        <small style="font-weight:400;color:var(--muted);font-size:0.85rem">優勝 — エスポラーダ北海道</small>
-      </div>
+      <div class="next-node">シーズン終了</div>
+      <div class="season-over">2026-27シーズン終了 🏆</div>
     `;
   }
 
-  // Schedule list
+  // ── スケジュールリスト ──
   const listEl = document.getElementById("schedule-list");
+
+  // レギュラーシーズン
   matches.forEach(m => {
     const isNext = nextMatch && m === nextMatch;
-    const rc = resultClass(m.result);
-    const haClass = m.home ? "home" : "";
+    const rc = m.date ? resultClass(m.result) : "tbd";
+    const haClass = m.home ? "home" : "away";
     const haLabel = m.home ? "HOME" : "AWAY";
+
+    const resultText = m.note
+      ? "未定"
+      : m.result
+        ? m.result
+        : m.time
+          ? `${m.time} KO`
+          : "未定";
+
+    const resultCls = m.note
+      ? "tbd"
+      : rc;
+
     const div = document.createElement("div");
     div.className = "schedule-item" + (isNext ? " next-up" : "");
-
-    const dateShort = formatDate(m.date).replace(/（.）/, "");
-    const nodeLabel = m.season_label ? m.season_label : `第${m.node}節`;
     div.innerHTML = `
-      <div class="s-date-col">${nodeLabel}<br>${dateShort}</div>
-      <div class="s-main">
+      <div class="s-node">第${m.node}節<br><span class="s-date">${formatDate(m.date)}</span></div>
+      <div>
         <div class="s-opponent">${m.opponent}</div>
         <div class="s-sub">
-          <span class="ha ${haClass}">${haLabel}</span>
-          · ${m.venue}
+          <span class="ha-pill ${haClass}">${haLabel}</span>
+          <span class="s-venue">${m.venue || "会場未定"}</span>
         </div>
       </div>
-      <div class="s-right">
-        <div class="s-result ${rc}">${m.result || m.time+"KO"}</div>
-      </div>
+      <div class="s-result ${resultCls}">${resultText}</div>
     `;
     listEl.appendChild(div);
   });
-}
 
-function togglePreview() {
-  const preview = document.getElementById("x-preview");
-  const btn = document.getElementById("toggle-preview");
-  if (!preview) return;
-  previewOpen = !previewOpen;
-  preview.classList.toggle("open", previewOpen);
-  btn.textContent = previewOpen ? "▲ 閉じる" : "Xポスト案を見る";
-  if (previewOpen) {
-    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> 閉じる`;
-  } else {
-    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.732-8.867L1.245 2.25H8.38l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Xポスト案を見る`;
+  // ファイナルシーズン
+  if (data.final_season) {
+    const fs = data.final_season;
+    const header = document.createElement("div");
+    header.className = "final-header";
+    header.innerHTML = `
+      <div class="final-header-label">🏆 ファイナルシーズン</div>
+      <div class="final-header-sub">${fs.period}</div>
+    `;
+    listEl.appendChild(header);
+
+    fs.venues.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "schedule-item final-season";
+      div.innerHTML = `
+        <div class="s-node" style="color:#9b7fd4;">${v.nodes}</div>
+        <div>
+          <div class="s-opponent" style="font-size:0.85rem;">${v.dates}</div>
+          <div class="s-sub"><span class="s-venue">${v.venue}</span></div>
+        </div>
+        <div class="s-result tbd">詳細未定</div>
+      `;
+      listEl.appendChild(div);
+    });
   }
 }
 
 loadSchedule().catch(() => {
   document.getElementById("next-card").innerHTML =
-    `<div class="next-label">Error</div><div class="season-over" style="color:var(--loss)">データ取得失敗</div>`;
+    `<div style="color:var(--muted)">データ取得失敗</div>`;
 });
 </script>
 </body>
