@@ -511,7 +511,7 @@ body {
     </div>
     <div class="modal-body">
       <div id="modal-inner"></div>
-      <div class="audio-row">
+      <div class="audio-row" style="display:none;">
         <button class="play-btn" id="modal-play" onclick="toggleAudio()">
           <svg id="modal-icon" width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
             <path d="M0 0 L12 7 L0 14 Z"/>
@@ -556,34 +556,35 @@ const chants = [
 ];
 
 const calls = [
-  { title: "#1 戸田 貴英（GK）", call: "たーか　たーか　たーか", origin: "Narco",
+  { no: "1",  pos: "GK", title: "戸田 貴英", read: "とだ たかひで", call: "たーか　たーか　たーか", origin: "Narco",
     chant: ["ラーラララー　ラーラララー", "とーだたかーひで　ラーラララー", "ラーラララー　ラーラララー", "とーだたかーひで　ラーラララー"], audio: null },
-  { title: "#2 杉上 理央（GK）", call: "りーお　りーお　りーお", chant: null, audio: null },
-  { title: "#5 櫛部 悠路（FP）", call: "ゆーろ＊＊＊　ゆーろ＊＊＊", chant: null, audio: null },
-  { title: "#6 笠島 大暉（FP）", call: "だいき＊＊＊　だいき＊＊＊", origin: "ザ・ヒットパレード",
+  { no: "2",  pos: "GK", title: "杉上 理央", read: "すぎうえ りお", call: "りーお　りーお　りーお", chant: null, audio: null },
+  { no: "4",  pos: "FP", title: "髙橋 康平", read: "たかはし こうへい", call: "こうへい＊＊＊　こうへい＊＊＊", chant: null, audio: null },
+  { no: "5",  pos: "FP", title: "櫛部 悠路", read: "くしべ ゆうろ", call: "ゆーろ＊＊＊　ゆーろ＊＊＊", chant: null, audio: null },
+  { no: "6",  pos: "FP", title: "笠島 大暉", read: "かさじま だいき", call: "だいき＊＊＊　だいき＊＊＊", origin: "ザ・ヒットパレード",
     chant: ["ゲットゴール　ゲットゴール", "かーさじーま　だーいきー", "ゲットゴール　ゲットゴール", "かーさじーま　だーいきー"], audio: null },
-  { title: "#7 室田 祐希（FP）", call: "ゆーき＊＊＊　ゆーき＊＊＊", origin: "勇気100％",
+  { no: "7",  pos: "FP", title: "室田 祐希", read: "むろた ゆうき", call: "ゆーき＊＊＊　ゆーき＊＊＊", origin: "勇気100％",
     chant: ["そうさ　100％ゆーきー", "もうがんばるしーかなーいさー", "ゆーきだけが持つ輝き", "えいえーんに　忘れないーでねー", "（ヘイヘイ）"], audio: null },
-  { title: "#10 鈴木 裕太郎（FP）", call: ["ゆーたろー＊＊　＊＊＊", "ゆーたろー＊＊　＊＊＊"], origin: "サタデーナイト",
+  { no: "8",  pos: "FP", title: "藤村 虹希", read: "ふじむら こうき", call: "こうき＊＊＊　こうき＊＊＊", chant: null, audio: null },
+  { no: "9",  pos: "FP", title: "山田 優介", read: "やまだ ゆうすけ", call: "ゆうすけ＊＊＊　ゆうすけ＊＊＊",
+    chant: ["やいやいやい　決めろユースケ", "やいやいやい　決めろユースケ"], audio: null },
+  { no: "10", pos: "FP", title: "鈴木 裕太郎", read: "すずき ゆうたろう", call: ["ゆーたろー＊＊　＊＊＊", "ゆーたろー＊＊　＊＊＊"], origin: "サタデーナイト",
     chant: ["輝け俺たちの誇り", "ゆうたろう　ゆうたろう", "輝け俺たちの誇り", "ゆうたろう　ゆうたろう", "オオオーオオー　オーオーオーオオー"], audio: null },
-  { title: "#14 菅原 慶達（FP）", call: ["け・い・た・つ＊＊＊＊", "け・い・た・つ＊＊＊＊"], origin: "Kernkraft 400",
+  { no: "12", pos: "GK", title: "町田 憲信", read: "まちだ けんしん", call: "けんしん＊＊＊　けんしん＊＊＊", chant: null, audio: null },
+  { no: "14", pos: "FP", title: "菅原 慶達", read: "すがわら けいたつ", call: ["け・い・た・つ＊＊＊＊", "け・い・た・つ＊＊＊＊"], origin: "Kernkraft 400",
     chant: ["おおおおお　おっおおおおお", "おっおおおおっお　け・い・た・つ"], audio: null },
-  { title: "#15 佐藤 悠平（FP）", call: "ゆーへい＊＊＊　ゆーへい＊＊＊", chant: null, audio: null },
-  { title: "#16 山本 航平（FP）", call: "こーへい＊＊＊　こーへい＊＊＊", origin: "See Off",
-    chant: ["止まらねー　やまーもと　こーへーい", "暴れーろ　荒ーれー狂えー", "ララララーラ　ラーラララー", "行けよ　こーへー"], audio: null },
-  { title: "#17 水上 玄太（FP）", call: "げんた＊＊＊　げんた＊＊＊", origin: "リンダリンダ",
+  { no: "15", pos: "FP", title: "佐藤 悠平", read: "さとう ゆうへい", call: "ゆーへい＊＊＊　ゆーへい＊＊＊", chant: null, audio: null },
+  { no: "16", pos: "FP", title: "本郷 颯", read: "ほんごう はやと", call: "はやと＊＊＊　はやと＊＊＊", chant: null, audio: null },
+  { no: "17", pos: "FP", title: "水上 玄太", read: "みずかみ げんた", call: "げんた＊＊＊　げんた＊＊＊", origin: "リンダリンダ",
     chant: ["げんたげんたー", "げんたげんたげんたーー", "げんたげんたー", "げんたげんたげんたー　ゴール"], audio: null },
-  { title: "#18 宮原 勇哉（FP）", call: ["みっやはら　みやはら＊＊", "みっやはら　みやはら＊＊"], origin: "日曜日よりの使者",
+  { no: "18", pos: "FP", title: "宮原 勇哉", read: "みやはら ゆうき", call: ["みっやはら　みやはら＊＊", "みっやはら　みやはら＊＊"], origin: "日曜日よりの使者",
     chant: ["みやはーら　さあ行こうぜ", "みやはーら　ララララーラ", "みやはーら　バモポンテ", "みやはーら　ラララララー"], audio: null },
-  { title: "#19 中浦 慶大（FP）", call: "けいた＊＊＊　けいた＊＊＊", chant: null, audio: null },
-  { title: "#20 佐藤 明生（FP）", call: "あきお＊＊＊　あきお＊＊＊", origin: "We Will Rock You",
+  { no: "19", pos: "FP", title: "中浦 慶大", read: "なかうら けいた", call: "けいた＊＊＊　けいた＊＊＊", chant: null, audio: null },
+  { no: "20", pos: "FP", title: "佐藤 明生", read: "さとう あきお", call: "あきお＊＊＊　あきお＊＊＊", origin: "We Will Rock You",
     chant: ["わーれーらーの　あきお", "行ーけー行ーけー　あきお"], audio: null },
-  { title: "#21 中野 翼（FP）", call: ["なかのつーばさ＊＊＊", "なかのつーばさ＊＊＊"], chant: null, audio: null },
-  { title: "#22 髙橋 翼（FP）", call: "＊　＊＊＊つばさ　＊　＊＊＊つばさ", chant: null, audio: null },
-  { title: "#23 西村 啓（FP）", call: ["にしむら　けい＊＊　＊＊＊", "にしむら　けい＊＊　＊＊＊"], origin: "ミッキーマウスマーチ",
-    chant: ["にっしむら　にっしむら　にっしむらけい", "にっしむら　にっしむら　にっしむらけい"], audio: null },
-  { title: "#24 荒谷 洸介（FP）", call: "こうすけ＊＊＊　こうすけ＊＊＊", chant: null, audio: null },
-  { title: "#25 吉川 頼（GK）", call: "らーい　らーい　らーい", chant: null, audio: null },
+  { no: "22", pos: "FP", title: "髙橋 翼", read: "たかはし つばさ", call: "＊　＊＊＊つばさ　＊　＊＊＊つばさ", chant: null, audio: null },
+  { no: "24", pos: "FP", title: "荒谷 洸介", read: "あらや こうすけ", call: "こうすけ＊＊＊　こうすけ＊＊＊", chant: null, audio: null },
+  { no: "25", pos: "GK", title: "吉川 頼", read: "よしかわ らい", call: "らーい　らーい　らーい", chant: null, audio: null },
 ];
 
 // ── ヘルパー ──
@@ -618,14 +619,20 @@ function renderCalls() {
   const el = document.getElementById("call-list");
   calls.forEach(item => {
     const div = document.createElement("div");
-    div.className = "item";
-    let badges = `<span class="badge badge-call">コール</span>`;
+    div.className = "item" + (item.call ? "" : " wip");
+    const posBg = item.pos === "GK" ? "#e8f6fd" : "#f0f4ff";
+    const posColor = item.pos === "GK" ? "#1a8fc4" : "#4a5fa8";
+    let badges = item.call
+      ? `<span class="badge badge-call">コール</span>`
+      : `<span class="badge" style="background:#f0f0f0;color:#aaa;border-color:#e0e0e0;">準備中</span>`;
     if (item.chant) badges += `<span class="badge badge-chant">チャント</span>`;
     div.innerHTML = `
-      <span class="item-name">${item.title}</span>
+      <span class="item-name">
+        <span style="font-size:0.72rem;color:var(--muted);margin-right:4px;">#${item.no}</span><span style="display:inline-block;font-size:0.65rem;font-weight:900;padding:1px 6px;border-radius:4px;background:${posBg};color:${posColor};margin-right:6px;">${item.pos}</span>${item.title}<span style="font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:5px;">（${item.read}）</span>
+      </span>
       <div class="item-badges">${badges}</div>
-      <span class="item-chevron">›</span>`;
-    div.addEventListener("click", () => openModalCall(item));
+      <span class="item-chevron">${item.call ? "›" : ""}</span>`;
+    if (item.call) div.addEventListener("click", () => openModalCall(item));
     el.appendChild(div);
   });
 }
@@ -656,8 +663,15 @@ function openModalChant(item) {
 function openModalCall(item) {
   currentItem = item;
   stopAudio();
-  let inner = `<div class="modal-title">${item.title}</div>`;
-  inner += `<div class="modal-section-label">コール</div>
+  const posBg = item.pos === "GK" ? "#e8f6fd" : "#f0f4ff";
+  const posColor = item.pos === "GK" ? "#1a8fc4" : "#4a5fa8";
+  let inner = `
+    <div class="modal-type">選手コール</div>
+    <div class="modal-title">
+      <span style="font-size:0.85rem;color:var(--muted);margin-right:5px;">#${item.no}</span><span style="display:inline-block;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:4px;background:${posBg};color:${posColor};margin-right:8px;vertical-align:middle;">${item.pos}</span>${item.title}
+      <div style="font-size:0.8rem;color:var(--muted);font-weight:400;margin-top:3px;">（${item.read}）</div>
+    </div>
+    <div class="modal-section-label">コール</div>
     ${renderModalLines([].concat(item.call), false)}`;
   if (item.chant) {
     inner += `<div class="modal-divider"></div>
