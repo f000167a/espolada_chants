@@ -491,9 +491,7 @@ async function loadSchedule() {
       ? "未定"
       : m.result
         ? m.result
-        : m.time
-          ? `${m.time} KO`
-          : "未定";
+        : "―";
 
     const resultCls = m.note
       ? "tbd"
