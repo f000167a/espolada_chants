@@ -148,13 +148,17 @@ body {
   font-size: 1.5rem;
   font-weight: 900;
   color: var(--text);
-  margin-bottom: 2px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.next-time {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 16px;
+.next-time-inline {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--text);
 }
 
 /* ホーム・アウェーバッジ */
@@ -439,10 +443,8 @@ async function loadSchedule() {
          <div class="next-espolada">エスポラーダ北海道</div>`;
 
     const dateLine = nextMatch.date
-      ? `<div class="next-date">${formatDateLong(nextMatch.date)}</div>
-         <div class="next-time">${nextMatch.time} キックオフ</div>`
-      : `<div class="next-date" style="color:var(--muted);font-size:1.1rem;">日程未定</div>
-         <div class="next-time" style="color:var(--muted);">詳細は後日発表</div>`;
+      ? `<div class="next-date">${formatDateLong(nextMatch.date)}<span class="next-time-inline">${nextMatch.time} KO</span></div>`
+      : `<div class="next-date" style="color:var(--muted);font-size:1.1rem;">日程未定</div>`;
 
     const venueLine = nextMatch.venue && nextMatch.venue !== "未定"
       ? `＠<span>${nextMatch.venue}</span>`
