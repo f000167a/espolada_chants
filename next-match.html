@@ -258,7 +258,7 @@ body {
 
 .schedule-item {
   display: grid;
-  grid-template-columns: 56px 1fr auto;
+  grid-template-columns: 90px 1fr auto;
   align-items: center;
   gap: 12px;
   padding: 13px 14px;
@@ -276,12 +276,18 @@ body {
   font-weight: 700;
   color: var(--muted);
   letter-spacing: 0.05em;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .s-date {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text);
+  font-weight: 700;
+}
+
+.s-time-inline {
+  font-size: 0.78rem;
+  color: var(--blue-dark);
   font-weight: 700;
 }
 
@@ -453,9 +459,8 @@ async function loadSchedule() {
     card.innerHTML = `
       <div class="next-node">第${nextMatch.node}節</div>
       ${dateLine}
-      <div class="ha-badge ${haClass}">${haLabel}</div>
       <div class="next-vs">${vsHTML}</div>
-      <div class="next-venue">${venueLine}</div>
+      <div class="next-venue"><span class="ha-badge ${haClass}" style="font-size:0.72rem;padding:3px 10px;margin-bottom:0;display:inline-flex;">${haLabel}</span>&ensp;＠<span>${nextMatch.venue && nextMatch.venue !== "未定" ? nextMatch.venue : "会場未定"}</span></div>
       <a class="share-btn"
         href="https://twitter.com/intent/tweet?text=${encodeURIComponent(buildPostText(nextMatch, data.season))}"
         target="_blank" rel="noopener">
@@ -494,10 +499,11 @@ async function loadSchedule() {
       ? "tbd"
       : rc;
 
+    const timeText = m.time && !m.note ? `<span class="s-time-inline">${m.time}</span>` : "";
     const div = document.createElement("div");
     div.className = "schedule-item" + (isNext ? " next-up" : "");
     div.innerHTML = `
-      <div class="s-node">第${m.node}節<br><span class="s-date">${formatDate(m.date)}</span></div>
+      <div class="s-node">第${m.node}節<br><span class="s-date">${formatDate(m.date)}</span> ${timeText}</div>
       <div>
         <div class="s-opponent">${m.opponent}</div>
         <div class="s-sub">
