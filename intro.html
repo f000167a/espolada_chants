@@ -157,14 +157,19 @@ body {
 }
 
 .chant-clap {
-  font-size: 2rem;
-  letter-spacing: 0.15em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   margin-bottom: 24px;
-  color: rgba(255,255,255,0.95);
+  font-size: 1.8rem;
 }
 
-.chant-clap:last-child {
-  margin-bottom: 0;
+.chant-clap:last-child { margin-bottom: 0; }
+
+.clap-group {
+  display: flex;
+  gap: 6px;
 }
 
 .step1-note {
@@ -472,8 +477,9 @@ body {
 <body>
 
 <!-- 固定バナー -->
-<div class="top-bar" style="justify-content: flex-end;">
-  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/">全チャント・選手一覧</a>
+<div class="top-bar">
+  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/">📖 チャント一覧</a>
+  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/next-match.html">📅 試合日程</a>
 </div>
 
 <!-- ステップ1 -->
@@ -484,9 +490,17 @@ body {
 
   <div class="chant-block">
     <div class="chant-line">エースポラーダ！</div>
-    <div class="chant-clap">👏👏　👏👏👏</div>
+    <div class="chant-clap">
+      <div class="clap-group"><span>👏</span><span>👏</span></div>
+      <div style="width:14px;"></div>
+      <div class="clap-group"><span>👏</span><span>👏</span><span>👏</span></div>
+    </div>
     <div class="chant-line">エースポラーダ！</div>
-    <div class="chant-clap">👏👏　👏👏👏</div>
+    <div class="chant-clap">
+      <div class="clap-group"><span>👏</span><span>👏</span></div>
+      <div style="width:14px;"></div>
+      <div class="clap-group"><span>👏</span><span>👏</span><span>👏</span></div>
+    </div>
   </div>
 
   <div class="scroll-hint">
@@ -509,7 +523,7 @@ body {
   <div class="step-label">STEP 3</div>
   <div class="step3-title">もっと覚えたい人へ</div>
   <div class="step3-desc">全チャント・選手コールの一覧はこちら。</div>
-  <a class="step3-btn" href="https://f000167a.github.io/espolada_chants/">全チャント・選手一覧</a>
+  <a class="step3-btn" href="https://f000167a.github.io/espolada_chants/">📖 全チャント・選手一覧</a>
 </div>
 
 <!-- モーダル -->
