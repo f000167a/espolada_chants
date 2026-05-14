@@ -2,7 +2,7 @@
   "season": "2026-27",
   "division": "F1",
   "team": "エスポラーダ北海道",
-  "updated": "2026-05-06",
+  "updated": "2026-05-15",
   "matches": [
     { "node": 1,  "date": "2026-05-31", "time": "13:00", "opponent": "しながわシティ",        "home": true,  "venue": "苫小牧市総合体育館",                     "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202605" },
     { "node": 2,  "date": "2026-06-07", "time": "13:00", "opponent": "名古屋オーシャンズ",    "home": true,  "venue": "北ガスアリーナ札幌46",                    "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202606" },
@@ -21,7 +21,7 @@
     { "node": 15, "date": "2026-10-10", "time": "14:00", "opponent": "湘南ベルマーレ",        "home": false, "venue": "小田原アリーナ",                           "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202610" },
     { "node": 16, "date": "2026-10-26", "time": "19:00", "opponent": "バルドラール浦安",      "home": true,  "venue": "北ガスアリーナ札幌46",                    "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202610" },
     { "node": 17, "date": "2026-11-01", "time": "13:00", "opponent": "名古屋オーシャンズ",    "home": false, "venue": "名古屋市千種スポーツセンター",              "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202611" },
-    { "node": 18, "date": null,         "time": null,    "opponent": "しながわシティ",        "home": false, "venue": "未定",                                     "result": null, "fleague_url": null, "note": "日程未定" },
+    { "node": 18, "date": "2026-11-17", "time": "18:30", "opponent": "しながわシティ",        "home": false, "venue": "駒沢オリンピック公園総合運動場屋内競技場", "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202611" },
     { "node": 19, "date": "2026-11-21", "time": "14:00", "opponent": "ペスカドーラ町田",      "home": false, "venue": "町田市立総合体育館",                       "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202611" },
     { "node": 20, "date": "2026-11-29", "time": "13:00", "opponent": "立川アスレティックFC",  "home": true,  "venue": "北ガスアリーナ札幌46",                    "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202611" },
     { "node": 21, "date": "2026-12-13", "time": "13:00", "opponent": "ボアルース長野",        "home": true,  "venue": "北ガスアリーナ札幌46",                    "result": null, "fleague_url": "https://www.fleague.jp/score/?ym=202612" },
