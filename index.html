@@ -115,6 +115,39 @@ body {
   z-index: 1;
 }
 
+.next-match-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-top: 14px;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+
+.next-match-banner:hover {
+  background: rgba(255,255,255,0.24);
+}
+
+.next-match-banner-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.next-match-banner-body {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+}
+
 .header-nav {
   margin-top: 14px;
   position: relative;
@@ -485,6 +518,10 @@ body {
   </div>
   <div class="header-title">CHANT BOOK</div>
   <div class="header-sub">全チャント・選手コール一覧</div>
+  <a class="next-match-banner" href="./next-match.html" id="next-match-banner" style="display:none;">
+    <span class="next-match-banner-label">NEXT MATCH</span>
+    <span class="next-match-banner-body" id="next-match-banner-body"></span>
+  </a>
 </div>
 
 <div class="tabs-wrap">
@@ -736,6 +773,30 @@ document.querySelector(".modal").addEventListener("touchend", e => { if (e.chang
 
 renderChants();
 renderCalls();
+
+// ── 次の試合案内 ──
+async function loadNextMatchBanner() {
+  const res = await fetch("./schedule.json");
+  const data = await res.json();
+  const nextMatch = data.matches.find(m => !m.result);
+  if (!nextMatch) return;
+
+  const DAYS = ["日","月","火","水","木","金","土"];
+  let dateText = "日程未定";
+  if (nextMatch.date) {
+    const d = new Date(nextMatch.date + "T00:00:00");
+    dateText = `${d.getMonth()+1}/${d.getDate()}（${DAYS[d.getDay()]}）`;
+    if (nextMatch.time) dateText += ` ${nextMatch.time} KO`;
+  }
+  const haText = nextMatch.home ? "🏠 HOME" : "✈️ AWAY";
+  const venueText = nextMatch.venue && nextMatch.venue !== "未定" ? nextMatch.venue : "会場未定";
+
+  document.getElementById("next-match-banner-body").textContent =
+    `${dateText}｜vs ${nextMatch.opponent}（${haText}）｜${venueText}`;
+  document.getElementById("next-match-banner").style.display = "flex";
+}
+
+loadNextMatchBanner().catch(() => {});
 </script>
 </body>
 </html>
