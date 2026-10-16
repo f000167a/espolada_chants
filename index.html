@@ -331,7 +331,7 @@ body {
   justify-content: center;
 }
 
-.overlay.open { display: flex; }
+.overlay[open] { display: flex; }
 
 .modal {
   background: var(--surface);
@@ -499,14 +499,15 @@ body {
 
 .audio-status { font-size: 0.78rem; color: var(--muted); }
 </style>
+<link rel="stylesheet" href="./assets/dialog.css">
 </head>
 <body>
 
 <div class="header">
   <div class="header-top-row">
     <div class="header-brand">ESPOLADA HOKKAIDO</div>
-    <div style="display:flex;gap:8px;align-items:center;position:relative;z-index:1;">
-      <a class="schedule-block" href="https://f000167a.github.io/espolada_chants/intro.html">
+    <div class="header-links">
+      <a class="schedule-block" href="./intro.html">
         <span class="schedule-icon">📣</span>
         <span class="schedule-text">応援のはじめ方</span>
       </a>
@@ -525,41 +526,43 @@ body {
 </div>
 
 <div class="tabs-wrap">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('chants', this)">チームチャント</button>
-    <button class="tab" onclick="switchTab('calls', this)">選手コール</button>
+  <div class="tabs" role="tablist" aria-label="チャントの種類">
+    <button type="button" class="tab active" id="tab-chants" role="tab" aria-selected="true" aria-controls="panel-chants" onclick="switchTab('chants', this)">チームチャント</button>
+    <button type="button" class="tab" id="tab-calls" role="tab" aria-selected="false" aria-controls="panel-calls" tabindex="-1" onclick="switchTab('calls', this)">選手コール</button>
   </div>
 </div>
 
 <div class="list-wrap">
-  <div class="tab-panel active" id="panel-chants">
+  <div class="tab-panel active" id="panel-chants" role="tabpanel" aria-labelledby="tab-chants">
     <div id="chant-list"></div>
   </div>
-  <div class="tab-panel" id="panel-calls">
+  <div class="tab-panel" id="panel-calls" role="tabpanel" aria-labelledby="tab-calls" hidden>
     <div id="call-list"></div>
   </div>
 </div>
 
 <!-- MODAL -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+<dialog class="overlay" id="overlay" aria-labelledby="modal-title" onclick="handleOverlayClick(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-close-row">
-      <button class="close-btn" onclick="closeModal()">✕</button>
+      <button type="button" class="close-btn" aria-label="閉じる" autofocus onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
       <div id="modal-inner"></div>
-      <div class="audio-row" style="display:none;">
-        <button class="play-btn" id="modal-play" onclick="toggleAudio()">
-          <svg id="modal-icon" width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+      <div class="audio-row" hidden>
+        <button type="button" aria-label="音源を再生" class="play-btn" id="modal-play" onclick="toggleAudio()">
+          <svg aria-hidden="true" id="modal-icon" width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
             <path d="M0 0 L12 7 L0 14 Z"/>
           </svg>
         </button>
-        <div class="audio-status" id="audio-status">音源準備中</div>
+        <div class="audio-status" id="audio-status" role="status">音源準備中</div>
       </div>
     </div>
   </div>
-</div>
+</dialog>
 
+<script src="./assets/dialog.js"></script>
+<script src="./assets/schedule.js"></script>
 <script>
 const chants = [
   { title: "エスポラーダコール",
@@ -641,12 +644,14 @@ function renderModalLines(lines, isChant) {
 function renderChants() {
   const el = document.getElementById("chant-list");
   chants.forEach(item => {
-    const div = document.createElement("div");
+    const div = document.createElement("button");
+    div.type = "button";
+    div.setAttribute("aria-haspopup", "dialog");
     div.className = "item";
     div.innerHTML = `
       <span class="item-name">${item.title}</span>
-      <div class="item-badges"><span class="badge badge-lyrics">歌詞</span></div>
-      <span class="item-chevron">›</span>`;
+      <span class="item-badges"><span class="badge badge-lyrics">歌詞</span></span>
+      <span class="item-chevron" aria-hidden="true">›</span>`;
     div.addEventListener("click", () => openModalChant(item));
     el.appendChild(div);
   });
@@ -655,7 +660,9 @@ function renderChants() {
 function renderCalls() {
   const el = document.getElementById("call-list");
   calls.forEach(item => {
-    const div = document.createElement("div");
+    const div = document.createElement("button");
+    div.type = "button";
+    div.setAttribute("aria-haspopup", "dialog");
     div.className = "item" + (item.call ? "" : " wip");
     const posBg = item.pos === "GK" ? "#e8f6fd" : "#f0f4ff";
     const posColor = item.pos === "GK" ? "#1a8fc4" : "#4a5fa8";
@@ -667,19 +674,41 @@ function renderCalls() {
       <span class="item-name">
         <span style="font-size:0.72rem;color:var(--muted);margin-right:4px;">#${item.no}</span><span style="display:inline-block;font-size:0.65rem;font-weight:900;padding:1px 6px;border-radius:4px;background:${posBg};color:${posColor};margin-right:6px;">${item.pos}</span>${item.title}<span style="font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:5px;">（${item.read}）</span>
       </span>
-      <div class="item-badges">${badges}</div>
-      <span class="item-chevron">${item.call ? "›" : ""}</span>`;
+      <span class="item-badges">${badges}</span>
+      <span class="item-chevron" aria-hidden="true">${item.call ? "›" : ""}</span>`;
+    div.disabled = !item.call;
     if (item.call) div.addEventListener("click", () => openModalCall(item));
     el.appendChild(div);
   });
 }
 
 function switchTab(id, btn) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("panel-" + id).classList.add("active");
+  document.querySelectorAll(".tab").forEach(tab => {
+    const selected = tab === btn;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  });
+  document.querySelectorAll(".tab-panel").forEach(panel => {
+    const selected = panel.id === "panel-" + id;
+    panel.classList.toggle("active", selected);
+    panel.hidden = !selected;
+  });
 }
+
+document.querySelector(".tabs").addEventListener("keydown", event => {
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  let index = tabs.indexOf(document.activeElement);
+  if (index < 0) return;
+  if (event.key === "ArrowRight") index = (index + 1) % tabs.length;
+  else if (event.key === "ArrowLeft") index = (index + tabs.length - 1) % tabs.length;
+  else if (event.key === "Home") index = 0;
+  else if (event.key === "End") index = tabs.length - 1;
+  else return;
+  event.preventDefault();
+  tabs[index].click();
+  tabs[index].focus();
+});
 
 // ── MODAL ──
 let currentAudio = null;
@@ -689,12 +718,12 @@ function openModalChant(item) {
   currentItem = item;
   document.getElementById("modal-inner").innerHTML = `
     <div class="modal-type">チームチャント</div>
-    <div class="modal-title">${item.title}</div>
+    <div class="modal-title" id="modal-title">${item.title}</div>
     ${item.origin ? `<div class="modal-origin">♪ ${item.origin}</div>` : ""}
     <div class="modal-section-label">歌詞</div>
     ${renderModalLines(item.lines, true)}`;
   setupAudio(item.audio);
-  document.getElementById("overlay").classList.add("open");
+  ChantDialog.open();
 }
 
 function openModalCall(item) {
@@ -704,7 +733,7 @@ function openModalCall(item) {
   const posColor = item.pos === "GK" ? "#1a8fc4" : "#4a5fa8";
   let inner = `
     <div class="modal-type">選手コール</div>
-    <div class="modal-title">
+    <div class="modal-title" id="modal-title">
       <span style="font-size:0.85rem;color:var(--muted);margin-right:5px;">#${item.no}</span><span style="display:inline-block;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:4px;background:${posBg};color:${posColor};margin-right:8px;vertical-align:middle;">${item.pos}</span>${item.title}
       <div style="font-size:0.8rem;color:var(--muted);font-weight:400;margin-top:3px;">（${item.read}）</div>
     </div>
@@ -718,23 +747,19 @@ function openModalCall(item) {
   }
   document.getElementById("modal-inner").innerHTML = inner;
   setupAudio(item.audio);
-  document.getElementById("overlay").classList.add("open");
+  ChantDialog.open();
 }
 
 function setupAudio(src) {
   stopAudio();
-  const btn = document.getElementById("modal-play");
-  const icon = document.getElementById("modal-icon");
-  const status = document.getElementById("audio-status");
-  icon.innerHTML = '<path d="M0 0 L12 7 L0 14 Z"/>';
-  btn.classList.remove("playing");
-  btn.disabled = !src;
-  status.textContent = src ? "タップして再生" : "音源準備中";
+  document.querySelector(".audio-row").hidden = !src;
+  document.getElementById("modal-play").disabled = !src;
+  document.getElementById("audio-status").textContent = src ? "タップして再生" : "音源準備中";
 }
 
 function closeModal() {
   stopAudio();
-  document.getElementById("overlay").classList.remove("open");
+  ChantDialog.close();
 }
 
 function handleOverlayClick(e) {
@@ -742,34 +767,51 @@ function handleOverlayClick(e) {
 }
 
 function stopAudio() {
-  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
-  const p = document.getElementById("modal-play");
-  const i = document.getElementById("modal-icon");
-  if (p) p.classList.remove("playing");
-  if (i) i.innerHTML = '<path d="M0 0 L12 7 L0 14 Z"/>';
-}
-
-function toggleAudio() {
-  if (!currentItem?.audio) return;
-  const btn = document.getElementById("modal-play");
-  const icon = document.getElementById("modal-icon");
-  const status = document.getElementById("audio-status");
-  if (currentAudio && !currentAudio.paused) {
-    stopAudio(); status.textContent = "タップして再生"; return;
+  const audio = currentAudio;
+  currentAudio = null;
+  if (audio) {
+    audio.onended = null;
+    audio.onerror = null;
+    audio.pause();
+    audio.currentTime = 0;
   }
-  if (!currentAudio) currentAudio = new Audio(currentItem.audio);
-  currentAudio.play();
-  currentAudio.onended = () => { stopAudio(); status.textContent = "タップして再生"; };
-  btn.classList.add("playing");
-  icon.innerHTML = '<rect x="0" y="0" width="4" height="14" rx="1"/><rect x="8" y="0" width="4" height="14" rx="1"/>';
-  status.textContent = "再生中";
+  const btn = document.getElementById("modal-play");
+  btn.classList.remove("playing");
+  btn.setAttribute("aria-label", "音源を再生");
+  document.getElementById("modal-icon").innerHTML = '<path d="M0 0 L12 7 L0 14 Z"/>';
+  document.getElementById("audio-status").textContent = currentItem?.audio ? "タップして再生" : "音源準備中";
 }
 
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
-
-let swipeY = 0;
-document.querySelector(".modal").addEventListener("touchstart", e => { swipeY = e.touches[0].clientY; }, { passive: true });
-document.querySelector(".modal").addEventListener("touchend", e => { if (e.changedTouches[0].clientY - swipeY > 60) closeModal(); }, { passive: true });
+async function toggleAudio() {
+  if (!currentItem?.audio) return;
+  if (currentAudio) {
+    stopAudio();
+    return;
+  }
+  const audio = new Audio(currentItem.audio);
+  currentAudio = audio;
+  const btn = document.getElementById("modal-play");
+  const status = document.getElementById("audio-status");
+  const showError = () => {
+    if (currentAudio !== audio) return;
+    stopAudio();
+    status.textContent = "再生できませんでした。もう一度お試しください";
+  };
+  audio.onended = () => { if (currentAudio === audio) stopAudio(); };
+  audio.onerror = showError;
+  btn.setAttribute("aria-label", "音源を停止");
+  document.getElementById("modal-icon").innerHTML = '<rect x="0" y="0" width="4" height="14" rx="1"/><rect x="8" y="0" width="4" height="14" rx="1"/>';
+  status.textContent = "読み込み中…";
+  try {
+    await audio.play();
+    // Ignore a delayed play result after closing, switching songs, or stopping.
+    if (currentAudio !== audio) return;
+    btn.classList.add("playing");
+    status.textContent = "再生中";
+  } catch (_) {
+    showError();
+  }
+}
 
 renderChants();
 renderCalls();
@@ -777,8 +819,9 @@ renderCalls();
 // ── 次の試合案内 ──
 async function loadNextMatchBanner() {
   const res = await fetch("./schedule.json");
+  if (!res.ok) throw new Error("Schedule request failed");
   const data = await res.json();
-  const nextMatch = data.matches.find(m => !m.result);
+  const nextMatch = Schedule.nextMatch(data.matches);
   if (!nextMatch) return;
 
   const DAYS = ["日","月","火","水","木","金","土"];

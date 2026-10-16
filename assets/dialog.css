@@ -1,0 +1,69 @@
+/* Shared keyboard and small-screen behavior for the chant dialogs. */
+:focus-visible {
+  outline: 3px solid #12658a;
+  outline-offset: 3px;
+}
+
+html.dialog-open,
+html.dialog-open body { overflow: hidden; }
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+}
+
+.overlay::backdrop { background: transparent; }
+.modal {
+  max-height: 82vh;
+  max-height: 82dvh;
+  overscroll-behavior: contain;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+}
+.modal-close-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+  padding-bottom: 6px;
+}
+.close-btn { width: 44px; height: 44px; }
+.modal-line { overflow-wrap: anywhere; }
+
+button.item,
+button.chant-card {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.item-name,
+.chant-card-info { min-width: 0; overflow-wrap: anywhere; }
+.chant-card-name,
+.chant-card-scene { display: block; }
+.item-badges { flex-wrap: wrap; justify-content: flex-end; }
+.item-chevron { flex-shrink: 0; }
+.header-top-row { flex-wrap: wrap; gap: 10px; }
+.header-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; position: relative; z-index: 1; }
+.schedule-block { min-height: 44px; }
+.audio-row[hidden] { display: none; }
+
+@media (max-width: 400px) {
+  .item { flex-wrap: wrap; gap: 8px; padding: 14px 12px; }
+  .item-name { flex-basis: 100%; }
+  .item-badges { margin-left: auto; }
+  .header { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
