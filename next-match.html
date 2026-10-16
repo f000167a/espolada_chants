@@ -371,6 +371,16 @@ body {
   font-size: 0.72rem;
   color: #9b7fd4;
 }
+.schedule-notice { margin-top: 12px; color: var(--muted); font-size: 0.78rem; line-height: 1.7; }
+.schedule-notice a { color: #12658a; }
+.retry-btn { margin-top: 12px; padding: 12px 18px; border: 1px solid var(--border); border-radius: 8px; background: var(--blue-light); color: var(--text); cursor: pointer; font: inherit; }
+:focus-visible { outline: 3px solid #12658a; outline-offset: 3px; }
+.schedule-item > div { min-width: 0; overflow-wrap: anywhere; }
+.final-header { flex-wrap: wrap; }
+@media (max-width: 400px) {
+  .schedule-item { grid-template-columns: 76px minmax(0, 1fr); gap: 8px; }
+  .s-result { grid-column: 2; text-align: left; }
+}
 </style>
 </head>
 <body>
@@ -392,8 +402,11 @@ body {
 
   <div class="section-label">2026-27 全試合日程</div>
   <div id="schedule-list" class="schedule-list"></div>
+  <p class="schedule-notice" id="schedule-updated"></p>
+  <p class="schedule-notice">日程・会場は変更される場合があります。<a href="https://espolada.com/match-info/fleague-schedule/" target="_blank" rel="noopener">公式サイトで最新情報を確認</a></p>
 </div>
 
+<script src="./assets/schedule.js"></script>
 <script>
 const DAYS = ["日","月","火","水","木","金","土"];
 
@@ -420,7 +433,7 @@ function resultClass(result) {
 function buildPostText(match, season) {
   const ha = match.home ? "🏠ホーム" : "✈️アウェイ";
   const label = `メットライフ生命Fリーグ${season} 第${match.node}節`;
-  const datePart = match.date ? `${formatDateLong(match.date)} ${match.time}KO` : "日程調整中";
+  const datePart = match.date ? `${formatDateLong(match.date)} ${match.time ? match.time + " KO" : "開始時刻未定"}` : "日程調整中";
   return `【次節】${label}\n`
     + `${datePart}\n`
     + `エスポラーダ北海道 vs ${match.opponent}\n`
@@ -431,10 +444,11 @@ function buildPostText(match, season) {
 
 async function loadSchedule() {
   const res = await fetch("./schedule.json");
+  if (!res.ok) throw new Error("Schedule request failed");
   const data = await res.json();
 
   const matches = data.matches;
-  const nextMatch = matches.find(m => !m.result);
+  const nextMatch = Schedule.nextMatch(matches);
   const card = document.getElementById("next-card");
 
   if (nextMatch) {
@@ -449,12 +463,8 @@ async function loadSchedule() {
          <div class="next-espolada">エスポラーダ北海道</div>`;
 
     const dateLine = nextMatch.date
-      ? `<div class="next-date">${formatDateLong(nextMatch.date)}<span class="next-time-inline">${nextMatch.time} KO</span></div>`
+      ? `<div class="next-date">${formatDateLong(nextMatch.date)}<span class="next-time-inline">${nextMatch.time ? nextMatch.time + " KO" : "開始時刻未定"}</span></div>`
       : `<div class="next-date" style="color:var(--muted);font-size:1.1rem;">日程未定</div>`;
-
-    const venueLine = nextMatch.venue && nextMatch.venue !== "未定"
-      ? `＠<span>${nextMatch.venue}</span>`
-      : `<span style="color:var(--muted)">会場未定</span>`;
 
     card.innerHTML = `
       <div class="next-node">第${nextMatch.node}節</div>
@@ -472,13 +482,15 @@ async function loadSchedule() {
     `;
   } else {
     card.innerHTML = `
-      <div class="next-node">シーズン終了</div>
-      <div class="season-over">2026-27シーズン終了 🏆</div>
+      <div class="next-node">次の試合</div>
+      <div class="season-over">今後の試合日程は未登録です</div>
     `;
   }
 
   // ── スケジュールリスト ──
   const listEl = document.getElementById("schedule-list");
+  listEl.replaceChildren();
+  document.getElementById("schedule-updated").textContent = data.updated ? `データ更新日：${data.updated}` : "";
 
   // レギュラーシーズン
   matches.forEach(m => {
@@ -487,15 +499,9 @@ async function loadSchedule() {
     const haClass = m.home ? "home" : "away";
     const haLabel = m.home ? "HOME" : "AWAY";
 
-    const resultText = m.note
-      ? "未定"
-      : m.result
-        ? m.result
-        : "―";
-
-    const resultCls = m.note
-      ? "tbd"
-      : rc;
+    const pendingResult = Schedule.isPastUnreported(m);
+    const resultText = m.result || (pendingResult ? "結果未更新" : m.note ? "未定" : "―");
+    const resultCls = m.result ? resultClass(m.result) : pendingResult || m.note ? "tbd" : rc;
 
     const timeText = m.time && !m.note ? `<span class="s-time-inline">${m.time}</span>` : "";
     const div = document.createElement("div");
@@ -543,7 +549,7 @@ async function loadSchedule() {
 
 loadSchedule().catch(() => {
   document.getElementById("next-card").innerHTML =
-    `<div style="color:var(--muted)">データ取得失敗</div>`;
+    `<div role="alert">試合日程を読み込めませんでした。</div><button type="button" class="retry-btn" onclick="location.reload()">再読み込み</button>`;
 });
 </script>
 </body>

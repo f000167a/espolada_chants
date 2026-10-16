@@ -374,7 +374,7 @@ body {
   justify-content: center;
 }
 
-.overlay.open { display: flex; }
+.overlay[open] { display: flex; }
 
 .modal {
   background: var(--surface);
@@ -473,13 +473,14 @@ body {
   margin-top: 8px;
 }
 </style>
+<link rel="stylesheet" href="./assets/dialog.css">
 </head>
 <body>
 
 <!-- 固定バナー -->
 <div class="top-bar">
-  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/">📖 チャント一覧</a>
-  <a class="top-bar-link" href="https://f000167a.github.io/espolada_chants/next-match.html">📅 試合日程</a>
+  <a class="top-bar-link" href="./index.html">📖 チャント一覧</a>
+  <a class="top-bar-link" href="./next-match.html">📅 試合日程</a>
 </div>
 
 <!-- ステップ1 -->
@@ -527,19 +528,20 @@ body {
   <div class="step-label">STEP 3</div>
   <div class="step3-title">もっと覚えたい人へ</div>
   <div class="step3-desc">全チャント・選手コールの一覧はこちら。</div>
-  <a class="step3-btn" href="https://f000167a.github.io/espolada_chants/">📖 全チャント・選手一覧</a>
+  <a class="step3-btn" href="./index.html">📖 全チャント・選手一覧</a>
 </div>
 
 <!-- モーダル -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+<dialog class="overlay" id="overlay" aria-labelledby="modal-title" onclick="handleOverlayClick(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-close-row">
-      <button class="close-btn" onclick="closeModal()">✕</button>
+      <button type="button" class="close-btn" aria-label="閉じる" autofocus onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
-</div>
+</dialog>
 
+<script src="./assets/dialog.js"></script>
 <script>
 const step2chants = [
   { title: "エスポラーダGO",
@@ -561,15 +563,17 @@ const step2chants = [
 function renderStep2() {
   const el = document.getElementById("step2-cards");
   step2chants.forEach(item => {
-    const div = document.createElement("div");
+    const div = document.createElement("button");
+    div.type = "button";
+    div.setAttribute("aria-haspopup", "dialog");
     div.className = "chant-card";
     div.innerHTML = `
-      <div class="chant-card-icon">${item.icon}</div>
-      <div class="chant-card-info">
-        <div class="chant-card-name">${item.title}</div>
-        <div class="chant-card-scene">${item.scene}</div>
-      </div>
-      <div class="chant-card-arrow">›</div>`;
+      <span class="chant-card-icon">${item.icon}</span>
+      <span class="chant-card-info">
+        <span class="chant-card-name">${item.title}</span>
+        <span class="chant-card-scene">${item.scene}</span>
+      </span>
+      <span class="chant-card-arrow">›</span>`;
     div.addEventListener("click", () => openModal(item));
     el.appendChild(div);
   });
@@ -583,29 +587,22 @@ function openModal(item) {
 
   document.getElementById("modal-body").innerHTML = `
     <div class="modal-type">チームチャント</div>
-    <div class="modal-title">${item.title}</div>
+    <div class="modal-title" id="modal-title">${item.title}</div>
     <div class="modal-scene">🎯 ${item.scene}</div>
     <div class="modal-lines">${linesHTML}</div>
     ${hasClap ? `<div class="modal-legend">💡 ＊ は太鼓のリズムです。声は出さなくてOK。</div>` : ""}
     ${item.note ? `<div class="modal-legend" style="margin-top:10px">👆 ${item.note}</div>` : ""}
   `;
-  document.getElementById("overlay").classList.add("open");
+  ChantDialog.open();
 }
 
 function closeModal() {
-  document.getElementById("overlay").classList.remove("open");
+  ChantDialog.close();
 }
 
 function handleOverlayClick(e) {
   if (e.target === document.getElementById("overlay")) closeModal();
 }
-
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
-
-// スワイプで閉じる
-let swipeY = 0;
-document.querySelector(".modal").addEventListener("touchstart", e => { swipeY = e.touches[0].clientY; }, { passive: true });
-document.querySelector(".modal").addEventListener("touchend", e => { if (e.changedTouches[0].clientY - swipeY > 60) closeModal(); }, { passive: true });
 
 renderStep2();
 </script>
